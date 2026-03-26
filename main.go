@@ -12,9 +12,9 @@ func helloHandler(write http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	
+
 	// define route
-	http.HandleFunc("/", helloHandler)
+	http.HandleFunc("/test", helloHandler)
 	
 	fmt.Println("Server running on http://localhost:8080")
 	
