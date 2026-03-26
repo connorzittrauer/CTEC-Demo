@@ -7,7 +7,7 @@ import(
 
 func main() {
 	http.HandleFunc("/test", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprint(writer, "AIR server fff wghjghjorking")
+		fmt.Fprint(writer, "AIR server fff !!!! wghjghjorking")
 	})
 
 	fmt.Println("Running on port :8080")
