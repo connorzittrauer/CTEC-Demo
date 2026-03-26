@@ -1,18 +1,22 @@
 package main
 
-import(
-	"fmt"
+import (
+	"log"
 	"net/http"
+
+	"auth-app/db"
+	"auth-app/handlers"
 )
 
 func main() {
-	http.HandleFunc("/test", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprint(writer, "AIR server fff !!!! wghjghjorking")
-	})
+	database := db.InitializeDatabase()
 
-	fmt.Println("Running on port :8080")
+	// Define routes
+	http.HandleFunc("/signup", handlers.SignupHandler(database))
+	http.HandleFunc("/login", handlers.LoginHandler(database))
 
+	log.Println("Server starting on port 8080...")
 	http.ListenAndServe(":8080", nil)
-}
+}	
 
 

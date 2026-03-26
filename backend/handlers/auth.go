@@ -10,6 +10,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func LoginHandler(db *sql.DB) http.HandlerFunc {
+	return func (writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte("/login endpoint hit success"))		
+	}
+
+}
+
+/**
+ * SignupHandler handles the signup process for new users
+ * @param db *sql.DB - The database connection
+ * @return http.HandlerFunc - The signup handler function
+ */
 func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 	return func(writer http.ResponseWriter, request *http.Request) {

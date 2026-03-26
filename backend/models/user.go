@@ -1,8 +1,7 @@
 /* 
-	Author: Connor Zittrauer
-
-	This script defines our USER struct with 
-	fields for email and password.
+*	Author: Connor Zittrauer
+*
+*	This script defines our USER struct with fields for email and password.
 */
 
 package models
