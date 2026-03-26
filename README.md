@@ -1,5 +1,6 @@
-## Tools/Libaries Used
-Air: For hot reloading Go
+# Tools/Libaries Used
+## Air 
+For hot reloading Go
 go install github.com/cosmtrek/air@latest
 
 
