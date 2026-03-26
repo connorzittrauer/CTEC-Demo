@@ -9,7 +9,10 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
-
+/* LoginHandler handles the login process for existing users
+ * @param db *sql.DB - The database connection
+ * @return http.HandlerFunc - The login handler function
+ */
 func LoginHandler(db *sql.DB) http.HandlerFunc {
 	return func (writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("/login endpoint hit success"))		
@@ -29,7 +32,13 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		var user models.User
 		
 		// Decodes our JSON request into the User struct
-		error := json.NewDecoder(request.Body).Decode(&user)
+		err := json.NewDecoder(request.Body).Decode(&user)
+
+		// Validates that the request method is POST
+		if request.Method != http.MethodPost {
+			http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+			return 
+		}
 
 		/** 
 		* Handles bad JSON formats
@@ -37,7 +46,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		* Expected incoming JSON:
 		* {"email": "user@citytelecoin.com", "password": "password"}
 	    */
-		if error != nil {
+		if err != nil {
 			http.Error(writer, "Invalid JSON format", http.StatusBadRequest)
 			return 
 		}
@@ -53,12 +62,12 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		// Hashes our password using the bcrypt library
-		hashedPassword, error := bcrypt.GenerateFromPassword(
+		hashedPassword, err := bcrypt.GenerateFromPassword(
 			[]byte(user.Password),
 			bcrypt.DefaultCost,
 		)
 
-		if error != nil {
+		if err != nil {
 			http.Error(writer, "Error hashing password", http.StatusInternalServerError)
 			return 
 		
@@ -68,11 +77,20 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		*	Insert the user into the database
 		*	$1 and $2 are placeholders to prevent SQL injection attacks
 		*/ 
-		_, error = db.Exec(
+		_, err = db.Exec(
 			"INSERT INTO users(email, password) VALUES($1, $2)",
 			user.Email,
 			string(hashedPassword),
 		)
+
+		if err != nil{
+			http.Error(writer, "User may already exist", http.StatusInternalServerError)
+			return
+		}
+
+
+		writer.WriteHeader(http.StatusCreated)
+		writer.Write([]byte("User created successfully"))
 
 
 
