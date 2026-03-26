@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	
 	database := db.InitializeDatabase()
 
 	// Define routes

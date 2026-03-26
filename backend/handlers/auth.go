@@ -9,13 +9,83 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
-/* LoginHandler handles the login process for existing users
+/* LoginHandler handles the login process for existing users to
+ * to be called from the React frontend when a user attempts to log in
+ *
  * @param db *sql.DB - The database connection
  * @return http.HandlerFunc - The login handler function
  */
 func LoginHandler(db *sql.DB) http.HandlerFunc {
 	return func (writer http.ResponseWriter, request *http.Request) {
-		writer.Write([]byte("/login endpoint hit success"))		
+
+		// Validates that the request method is POST
+		if request.Method != http.MethodPost {
+			http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		var user models.User
+
+		// Decodes our JSON request into the User struct
+		err := json.NewDecoder(request.Body).Decode(&user)
+		
+		if err != nil {
+			http.Error(writer, "Invalid JSON format", http.StatusBadRequest)
+			return
+		}
+
+		// Validates that email and password are provided
+		if user.Email == "" || user.Password == "" {
+			http.Error(writer, "Email and password required", http.StatusBadRequest)
+			return
+		}
+
+		var storedUser models.User
+
+		/**
+		* This case checks if the email exists.
+		* 
+		* We return a generic error message when the user is not found
+		* to avoid revealing whether an email exists in the system.
+		* This helps prevent user enumeration attacks.
+
+		* 
+		*/
+		query := "SELECT email, password FROM users WHERE email=$1"
+		err = db.QueryRow(query, user.Email).Scan(&storedUser.Email, &storedUser.Password)
+
+		if err == sql.ErrNoRows {
+			http.Error(writer, "Invalid email or password", http.StatusUnauthorized)
+			return
+		} else if err != nil {
+			http.Error(writer, "Database error", http.StatusInternalServerError)
+			return
+		}
+
+		/**  
+		 *  This case checks the provided password against the stored hash.
+		 
+		 *  Compares the provided password with the actual stored hashed password
+		 *	in the database and returns an error if they do not match.
+	     */ 
+		err = bcrypt.CompareHashAndPassword(
+			[]byte(storedUser.Password), 
+			[]byte(user.Password),
+		)
+
+		if err != nil {
+			http.Error(writer, "Invalid email or password", http.StatusUnauthorized)
+			return
+		}
+
+		// If we reach this point, the login is successful. We can return a success message.
+		writer.Header().Set("Content-Type", "application/json")
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(map[string]string{
+			"message":"Login Successful",
+		})
+
+		// writer.Write([]byte("/login endpoint hit success"))		
 	}
 
 }
@@ -31,7 +101,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		
 		var user models.User
 		
-		// Decodes our JSON request into the User struct
+		// Decodes our JSON request into the User struct for error handling and validation
 		err := json.NewDecoder(request.Body).Decode(&user)
 
 		// Validates that the request method is POST
@@ -88,11 +158,14 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-
 		writer.WriteHeader(http.StatusCreated)
 		writer.Write([]byte("User created successfully"))
 
-
-
 	}
+}
+
+func writeJSONResponse(writer http.ResponseWriter, statusCode int, data interface{}) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(statusCode)
+	json.NewEncoder(writer).Encode(data)	
 }
