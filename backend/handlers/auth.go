@@ -118,7 +118,9 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
-			http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+			writeJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
+				"error": "Method not allowed",
+			})
 			return
 		}
 
@@ -129,17 +131,23 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		* {"email": "user@citytelecoin.com", "password": "password"}
 		 */
 		if err != nil {
-			http.Error(writer, "Invalid JSON format", http.StatusBadRequest)
+			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": "Invalid JSON format",
+			})
 			return
 		}
 
 		if user.Email == "" || user.Password == "" {
-			http.Error(writer, "Email and password required", http.StatusBadRequest)
+			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": "Email and password required",
+			})
 			return
 		}
 
 		if !strings.Contains(user.Email, "@") {
-			http.Error(writer, "Invalid email format", http.StatusBadRequest)
+			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": "Invalid email format",
+			})
 			return
 		}
 
@@ -150,9 +158,10 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		)
 
 		if err != nil {
-			http.Error(writer, "Error hashing password", http.StatusInternalServerError)
+			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+				"error": "Error hashing password",
+			})
 			return
-
 		}
 
 		/**
@@ -166,13 +175,15 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		)
 
 		if err != nil {
-			http.Error(writer, "User may already exist", http.StatusInternalServerError)
+			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+				"error": "User may already exist",
+			})
 			return
 		}
 
-		writer.WriteHeader(http.StatusCreated)
-		writer.Write([]byte("User created successfully"))
-
+		writeJSONResponse(writer, http.StatusCreated, map[string]string{
+			"message": "User created successfully",
+		})
 	}
 }
 
