@@ -1,11 +1,68 @@
 package handlers
+import "strings"
 
 import (
+	"auth-app/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"
 
-	"backend/models"
-
 	"golang.org/x/crypto/bcrypt"
 )
+
+func SignupHandler(db *sql.DB) http.HandlerFunc {
+
+	return func(writer http.ResponseWriter, request *http.Request) {
+		
+		var user models.User
+		
+		// Decodes our JSON request into the User struct
+		error := json.NewDecoder(request.Body).Decode(&user)
+
+		/** 
+		* Handles bad JSON formats
+		*  
+		* Expected incoming JSON:
+		* {"email": "user@citytelecoin.com", "password": "password"}
+	    */
+		if error != nil {
+			http.Error(writer, "Invalid JSON format", http.StatusBadRequest)
+			return 
+		}
+
+		if user.Email == "" || user.Password == "" {
+			http.Error(writer, "Email and password required", http.StatusBadRequest)	
+			return; 
+		}
+
+		if !strings.Contains(user.Email, "@") {
+			http.Error(writer, "Invalid email format", http.StatusBadRequest)
+			return 
+		}
+
+		// Hashes our password using the bcrypt library
+		hashedPassword, error := bcrypt.GenerateFromPassword(
+			[]byte(user.Password),
+			bcrypt.DefaultCost,
+		)
+
+		if error != nil {
+			http.Error(writer, "Error hashing password", http.StatusInternalServerError)
+			return 
+		
+		}
+
+		/**  
+		*	Insert the user into the database
+		*	$1 and $2 are placeholders to prevent SQL injection attacks
+		*/ 
+		_, error = db.Exec(
+			"INSERT INTO users(email, password) VALUES($1, $2)",
+			user.Email,
+			string(hashedPassword),
+		)
+
+
+
+	}
+}
