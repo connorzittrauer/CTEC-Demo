@@ -1,0 +1,96 @@
+# =========================
+
+# Go build artifacts
+
+# =========================
+
+/bin/
+/tmp/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+
+*.test
+
+# Output of go build
+
+*.out
+
+# =========================
+
+# Go modules
+
+# =========================
+
+# (Keep go.mod and go.sum committed!)
+
+vendor/
+
+# =========================
+
+# Air (hot reload)
+
+# =========================
+
+tmp/
+.air.toml
+
+# =========================
+
+# Logs
+
+# =========================
+
+*.log
+
+# =========================
+
+# OS files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# IDE / Editor
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+
+# Environment variables
+
+# =========================
+
+.env
+.env.local
+.env.*.local
+
+# =========================
+
+# Node (if using React frontend)
+
+# =========================
+
+node_modules/
+dist/
+build/
+
+# =========================
+
+# Misc
+
+# =========================
+
+coverage.out
