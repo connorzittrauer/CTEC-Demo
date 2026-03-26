@@ -1,0 +1,15 @@
+# Defines the container for the PostgreSQL database
+services:
+  db:
+    image: postgres:15
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: authdb
+    ports:
+      - "5432:5432"
+    # Runs the initialization script on startup
+    volumes:
+      - ./db/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql

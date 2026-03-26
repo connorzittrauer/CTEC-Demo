@@ -1,24 +1,18 @@
 package main
 
-import (
+import(
 	"fmt"
 	"net/http"
 )
 
-
-
-func helloHandler(write http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(write, "HELLO DOGmom!")
-}
-
 func main() {
+	http.HandleFunc("/test", func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(writer, "AIR server wghjghjorking")
+	})
 
-	// define route
-	http.HandleFunc("/test", helloHandler)
-	
-	fmt.Println("Server running on http://localhost:8080")
-	
-	// defines port to be run on 
+	fmt.Println("Running on port :8080")
+
 	http.ListenAndServe(":8080", nil)
-
 }
+
+
