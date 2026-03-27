@@ -21,7 +21,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
-			writeJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",
 			})
 			return
@@ -32,7 +32,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 		// Decodes our JSON request into the User struct
 		err := json.NewDecoder(request.Body).Decode(&user)
 		if err != nil {
-			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Invalid JSON format",
 			})
 			return
@@ -40,7 +40,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		// Validates that email and password are provided
 		if user.Email == "" || user.Password == "" {
-			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Email and password required",
 			})
 			return
@@ -61,12 +61,12 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 		err = db.QueryRow(query, user.Email).Scan(&storedUser.Email, &storedUser.Password)
 
 		if err == sql.ErrNoRows {
-			writeJSONResponse(writer, http.StatusUnauthorized, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
 				"error": "Invalid email or password",
 			})
 			return
 		} else if err != nil {
-			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
 				"error": "Database error",
 			})
 			return
@@ -84,7 +84,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 		)
 
 		if err != nil {
-			writeJSONResponse(writer, http.StatusUnauthorized, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
 				"error": "Invalid email or password",
 			})
 			return
@@ -95,13 +95,13 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		if err != nil {
 			// If token generation fails, return a server error
-			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
 				"error": "Error generating JWT token",
 			})
 			return
 		}
 
-		writeJSONResponse(writer, http.StatusOK, map[string]string{
+		utils.WriteJSONResponse(writer, http.StatusOK, map[string]string{
 			"message": "Login Successful",
 			"token":   token,
 		})
@@ -126,7 +126,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
-			writeJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",
 			})
 			return
@@ -139,21 +139,21 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		* {"email": "user@citytelecoin.com", "password": "password"}
 		 */
 		if err != nil {
-			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Invalid JSON format",
 			})
 			return
 		}
 
 		if user.Email == "" || user.Password == "" {
-			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Email and password required",
 			})
 			return
 		}
 
 		if !strings.Contains(user.Email, "@") {
-			writeJSONResponse(writer, http.StatusBadRequest, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Invalid email format",
 			})
 			return
@@ -166,7 +166,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		)
 
 		if err != nil {
-			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
 				"error": "Error hashing password",
 			})
 			return
@@ -175,6 +175,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		/**
 		*	Insert the user into the database
 		*	$1 and $2 are placeholders to prevent SQL injection attacks
+		*   
 		 */
 		_, err = db.Exec(
 			"INSERT INTO users(email, password) VALUES($1, $2)",
@@ -183,21 +184,16 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		)
 
 		if err != nil {
-			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
 				"error": "User may already exist",
 			})
 			return
 		}
 
-		writeJSONResponse(writer, http.StatusCreated, map[string]string{
+		utils.WriteJSONResponse(writer, http.StatusCreated, map[string]string{
 			"message": "User created successfully",
 		})
 	}
 }
 
-// Utility function to write JSON responses messages
-func writeJSONResponse(writer http.ResponseWriter, statusCode int, data interface{}) {
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(statusCode)
-	json.NewEncoder(writer).Encode(data)
-}
+
