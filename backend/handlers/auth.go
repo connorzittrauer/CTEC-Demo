@@ -1,14 +1,13 @@
 package handlers
 
-import "strings"
-
 import (
 	"auth-app/models"
+	"auth-app/utils"
 	"database/sql"
 	"encoding/json"
-	"net/http"
-
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
+	"strings"
 )
 
 /* LoginHandler handles the login process for existing users to
@@ -91,11 +90,20 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// If we reach this point, the login is successful. We can return a success message.
-		writer.Header().Set("Content-Type", "application/json")
-		writer.WriteHeader(http.StatusOK)
-		json.NewEncoder(writer).Encode(map[string]string{
+		// Generates a JWT token for the user when authenticated
+		token, err := utils.GenerateJWT(storedUser.Email)
+
+		if err != nil {
+			// If token generation fails, return a server error
+			writeJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+				"error": "Error generating JWT token",
+			})
+			return
+		}
+
+		writeJSONResponse(writer, http.StatusOK, map[string]string{
 			"message": "Login Successful",
+			"token":   token,
 		})
 
 	}
