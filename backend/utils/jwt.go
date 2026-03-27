@@ -2,13 +2,21 @@ package utils
 
 import (
 	"time" 
+	"os"
 	"github.com/golang-jwt/jwt/v5" 
 )
 
-// Secret key used to sign JWTs
-// In production, this should come from environment variables (not hardcoded)
-// change to .ENV BEFORE DEPLOYING TO GITHUB!
-var jwtSecret = []byte("secretkey")
+// getJWTSecret retrieves the JWT secret from environment variables at runtime
+func getJWTSecret() []byte {
+	secret := os.Getenv("JWT_SECRET")
+
+	// Fail fast if missing
+	if secret == "" {
+		panic("JWT_SECRET not set in environment variables.")
+	}
+
+	return []byte(secret)
+}
 
 // Generates a signed JWT token for a given user email
 func GenerateJWT(email string) (string, error) {
@@ -21,5 +29,5 @@ func GenerateJWT(email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Sign the token with the secret key and return the string version 
-	return token.SignedString(jwtSecret)
+	return token.SignedString(getJWTSecret())
 }
