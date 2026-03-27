@@ -19,14 +19,17 @@ Open interactive PostgreSQL shell:
 ```bash
 docker exec -it auth-db psql -U postgres -d authdb
 ```
-
-List all tables
+List all tables:
 ```bash
 \dt
 ```
+Exit shell:
+```bash
+\q
+```
 
 ## Testing
-There are light testing suites for this project located for our **handlers** and **middleware**.
+Although it was not required in the project specs, I felt it important to include light testing. There are light testing suites for this project for the **handlers** and **middleware**.
 
 ### Handler Testing
 - Typically, we would use a mock database or test database and not the production database, but for the purposes 
