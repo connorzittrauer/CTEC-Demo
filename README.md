@@ -9,7 +9,8 @@ The JWT session key is exposed and tracked by git. In practice, we would
 of this exercise instead of hardcoding it to demonstrate my backend/security fundamentals.
 
 ### Getting Started
-1. Verify the latest version of Docker is installed
+1. Clone the repository
+2. Verify the latest version of Docker is installed
 2. Run: 
 ```bash
 docker compose up --build
@@ -52,12 +53,110 @@ Sample output after reseeding or new inserts:
 
 ```
 
-### Endpoints
+## API Overview
+```
+/signup   (POST)
+├── Description: Registers a new user
+├── Handler: `handlers/auth.go → SignupHandler`
+├── Request Body:
+│   ├── firstName (string, required)
+│   ├── lastName  (string, required)
+│   ├── email     (string, required)
+│   └── password  (string, required)
+├── Behavior:
+│   ├── Validates input
+│   ├── Hashes password using bcrypt
+│   ├── Stores user in database
+│   └── Returns success message
+└── Responses:
+    ├── 201 Created
+    ├── 400 Bad Request
+    └── 500 Internal Server Error
 
-### Testing Enpoints (CURL or Postman)
+/login   (POST)
+├── Description: Authenticates an existing user
+├── Handler: `handlers/auth.go → LoginHandler`
+├── Request Body:
+│   ├── email    (string, required)
+│   └── password (string, required)
+├── Behavior:
+│   ├── Retrieves user from database
+│   ├── Compares password using bcrypt
+│   ├── Generates JWT token
+│   └── Returns token
+└── Responses:
+    ├── 200 OK (returns JWT)
+    ├── 401 Unauthorized
+    └── 500 Internal Server Error
+
+/protected   (GET)
+├── Description: Example protected route
+├── Handler: `main.go` (wrapped with middleware)
+├── Middleware: `middleware/auth.go → AuthMiddleware`
+├── Headers:
+│   └── Authorization: Bearer <JWT_TOKEN>
+├── Behavior:
+│   ├── Validates JWT
+│   ├── Extracts user email from token
+│   └── Returns protected data
+└── Responses:
+    ├── 200 OK
+    └── 401 Unauthorized
+
+/logout   (POST)
+├── Description: Logs out the user (client-side token removal)
+├── Handler: `handlers/auth.go → LogoutHandler`
+├── Behavior:
+│   └── Returns success message
+└── Responses:
+    ├── 200 OK
+    └── 405 Method Not Allowed
+```
+
+## Testing API Endpoints (cURL)
+
+### /Signup 
+```bash
+curl -X POST http://localhost:8080/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "you@citytelecoin.com",
+    "password": "secure_password"
+  }'
+```
+#### Response:
+```json
+{"message":"User created successfully"}
+```
+### /Login 
+```bash
+curl -X POST http://localhost:8080/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "you@citytelecoin.com",
+    "password": "secure_password"
+  }'
+```
+### Response:
+```json
+{"message":"Login Successful","token":"<JWT_TOKEN>"}
+```
+
+### Access Protected Route
+Replace <JWT_TOKEN> with the token returned from ```/login```:
+```bash
+curl -X GET http://localhost:8080/protected \
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
+### Response:
+```json
+{"email":"you@citytelecoin.com","message":"You accessed a protected route!"}
+```
 
 ## Testing
-Although it was not required in the project specs, I felt it important to include light testing. There are light testing suites for this project for the **handlers** and **middleware**.
+Although it was not required in the project specs, I felt it important to include light testing suites for our **handlers** and **middleware**.
 
 ### 1. Handler Testing
 - Handlers are tested using Go’s `httptest` package to simulate HTTP requests and capture responses  
