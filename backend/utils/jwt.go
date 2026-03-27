@@ -6,8 +6,8 @@ import (
 	"github.com/golang-jwt/jwt/v5" 
 )
 
-// getJWTSecret retrieves the JWT secret from environment variables at runtime
-func getJWTSecret() []byte {
+// GetJWTSecret retrieves the JWT secret from environment variables at runtime
+func GetJWTSecret() []byte {
 	secret := os.Getenv("JWT_SECRET")
 
 	// Fail fast if missing
@@ -29,5 +29,5 @@ func GenerateJWT(email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Sign the token with the secret key and return the string version 
-	return token.SignedString(getJWTSecret())
+	return token.SignedString(GetJWTSecret())
 }

@@ -18,10 +18,8 @@ package middleware
 
 import (
 	"auth-app/utils"
-	"go/token"
 	"net/http"
 	"strings"
-
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -41,18 +39,19 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		// Extract token string (remove "Bearer ")
-		tokenString := strings.TrimPrefix(authHeader, "Bearer")
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
 		// Parse and validate the token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return utils.GetJWTSecret(), nil // next, create helper function in utils
+			return utils.GetJWTSecret(), nil 
 		})	
 
 
 		if err != nil || !token.Valid {
-			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string){
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string {
 				"error": "Invalid token",
-			}
+			})
+			return
 		}
 
 		// Valid token, proceed to the next handler
