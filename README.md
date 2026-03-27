@@ -61,7 +61,8 @@ Although it was not required in the project specs, I felt it important to includ
 
 
 ### Running Tests
-Since we are using Docker, we need to run the tests in a containerized environment instead of locally: 
+Since we are using Docker, we need to run the tests in a containerized environment instead of locally. We compose down
+first to stop and remove all currently running containers (this avoids 'connection refused' errors): 
 ```bash
 docker compose down
 docker compose run --rm backend go test -v ./...
