@@ -8,6 +8,19 @@ The JWT session key is exposed and tracked by git. In practice, we would
 **never** push a .env file to github. I simply included it for the purposes
 of this exercise instead of hardcoding it to demonstrate my backend/security fundamentals.
 
+### Getting Started
+1. Verify the latest version of Docker is installed
+2. Run: 
+```bash
+docker compose up --build
+```
+2. If that fails, you may have existing containers running, shut them down and run:
+```bash
+docker compose down -v
+docker compose build --no-cache
+docker compose up
+```
+
 ## Useful Commands
 air init
 go mod init ctec
@@ -24,22 +37,24 @@ List tables
 \dt
 ```
 
-View current users
+View current users:
 ```sql 
 SELECT * FROM users;
 ```
 
 Sample output after reseeding or new inserts:
 ```sql
-id |          email          |                           password                           |         created_at         
----+-------------------------+--------------------------------------------------------------+----------------------------
- 1 | bob@citytelecoin.com    | $2a$10$examplehashnotreal123456789                           | 2026-03-27 17:19:13.515744
- 2 | joel_newcombe@gmail.com | $2a$10$examplehashnotreal342342342q3                         | 2026-03-27 17:19:37.82899
- 3 | connor@protonmail.com   | $2a$10$examplehashnotreal53156426642                         | 2026-03-27 17:19:56.14417 
+
+ id | first_name | last_name |           email               |                 password                 |         created_at         
+----+------------+-----------+-------------------------------------------+--------------------------------------------------------------
+  1 | Test       | User      | test_1760...@citytelecoin.com | $2a$10$FAKEHashHere123456789             | 2026-03-27 21:14:53.881312
+  2 | Test       | User      | test_1774...@citytelcoin.com  | $2a$10$tFAKEHashHere342342342q3          | 2026-03-27 21:14:53.936665
+
 ```
 
+### Endpoints
 
-
+### Testing Enpoints (CURL or Postman)
 
 ## Testing
 Although it was not required in the project specs, I felt it important to include light testing. There are light testing suites for this project for the **handlers** and **middleware**.

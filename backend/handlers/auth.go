@@ -145,9 +145,9 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		if user.Email == "" || user.Password == "" {
+		if user.FirstName == "" || user.LastName == "" || user.Email == "" || user.Password == "" {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
-				"error": "Email and password required",
+				"error": "All fields are required",
 			})
 			return
 		}
@@ -174,11 +174,13 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 		/**
 		*	Insert the user into the database
-		*	$1 and $2 are placeholders to prevent SQL injection attacks
-		*   
+		*	$1, $2, $3, and $4 are placeholders to prevent SQL injection attacks
+		*
 		 */
 		_, err = db.Exec(
-			"INSERT INTO users(email, password) VALUES($1, $2)",
+			"INSERT INTO users(first_name, last_name, email, password) VALUES($1, $2, $3, $4)",
+			user.FirstName,
+			user.LastName,
 			user.Email,
 			string(hashedPassword),
 		)
@@ -207,16 +209,15 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 func LogoutHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		// Only POST allowed
-		if request.Method != http.MethodPost{
+		if request.Method != http.MethodPost {
 			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",
 			})
 			return
 		}
 
-		utils.WriteJSONResponse(writer, http.StatusOK, map[string]string {
+		utils.WriteJSONResponse(writer, http.StatusOK, map[string]string{
 			"message": "Logout successful. ",
 		})
 	}
 }
-

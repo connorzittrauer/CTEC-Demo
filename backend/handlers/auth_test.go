@@ -17,8 +17,9 @@ func TestSignupHandler(test *testing.T) {
 
 	// Generate unique email dymanically for testing
 	email := fmt.Sprintf("test_%d@citytelecoin.com", time.Now().UnixNano())
+
 	body := []byte(fmt.Sprintf(
-		`{"email":"%s","password":"root"}`,
+		`{"firstName":"Test","lastName":"User","email":"%s","password":"root"}`,
 		email,
 	))
 
@@ -43,11 +44,11 @@ func TestLoginHandler(test *testing.T) {
 	database := db.InitializeDatabase()
 
 	// Generate unique email for this test run
-	email := fmt.Sprintf("test_%d@example.com", time.Now().UnixNano())
+	email := fmt.Sprintf("test_%d@citytelcoin.com", time.Now().UnixNano())
 
 	// Create a test user in the database
 	signupBody := []byte(fmt.Sprintf(
-		`{"email":"%s","password":"root"}`,
+		`{"firstName":"Test","lastName":"User","email":"%s","password":"root"}`,
 		email,
 	))
 	signupRequest, _ := http.NewRequest("POST", "/signup", bytes.NewBuffer(signupBody))

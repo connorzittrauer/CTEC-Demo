@@ -1,12 +1,14 @@
 /* 
 *	Author: Connor Zittrauer
 *
-*	This script defines our USER struct with fields for email and password.
+*	This script defines our USER struct with fields for first name, last name, email, and password.
 */
 
 package models
 
 type User struct {
-	Email string `json:"email"`
-	Password string `json:"password"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
