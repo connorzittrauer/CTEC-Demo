@@ -196,4 +196,27 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+/**
+ * LogoutHandler handles user logout.
+ *
+ * Since we are using JWT (stateless authentication),
+ * logout is handled on the client by deleting the token.
+ *
+ * This endpoint exists to satisfy API completeness.
+ */
+func LogoutHandler() http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		// Only POST allowed
+		if request.Method != http.MethodPost{
+			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
+				"error": "Method not allowed",
+			})
+			return
+		}
+
+		utils.WriteJSONResponse(writer, http.StatusOK, map[string]string {
+			"message": "Logout successful. Please delete your token on the client side.",
+		})
+	}
+}
 
