@@ -15,29 +15,67 @@ go mod init ctec
 ### Docker Commands
 
 ### PSQL CLI Commands
-Open interactive PostgreSQL shell:     
-```bash
+Open interactive PostgreSQL shell: 
+```bash  
 docker exec -it auth-db psql -U postgres -d authdb
 ```
-List all tables:
-```bash
+List tables
+```bash 
 \dt
 ```
-Exit shell:
-```bash
-\q
+
+View current users
+```sql 
+SELECT * FROM users;
 ```
+
+Sample output after reseeding or new inserts:
+```sql
+id |          email          |                           password                           |         created_at         
+---+-------------------------+--------------------------------------------------------------+----------------------------
+ 1 | bob@citytelecoin.com    | $2a$10$examplehashnotreal123456789                           | 2026-03-27 17:19:13.515744
+ 2 | joel_newcombe@gmail.com | $2a$10$examplehashnotreal342342342q3                         | 2026-03-27 17:19:37.82899
+ 3 | connor@protonmail.com   | $2a$10$examplehashnotreal53156426642                         | 2026-03-27 17:19:56.14417 
+```
+
+
+
 
 ## Testing
 Although it was not required in the project specs, I felt it important to include light testing. There are light testing suites for this project for the **handlers** and **middleware**.
 
-### Handler Testing
-- Typically, we would use a mock database or test database and not the production database, but for the purposes 
-  of this project, we are using the production database 
-  ```/handlers/auth_test.go``` tests our ```/signup``` and ```/login``` endpoints by simulating an HTTP request, capturing the response, and asserting expected behavior
+### 1. Handler Testing
+- Handlers are tested using Go’s `httptest` package to simulate HTTP requests and capture responses  
+- Tests validate expected status codes and response behavior for `/signup` and `/login`  
+- The production database is used for simplicity in this project (instead of mocks or a dedicated test DB)  
+- Located in `handlers/auth_test.go`
 
-### Middleware Testing
+### 2. Middleware Testing
+- Middleware is tested in isolation using Go’s `httptest` package  
+- Tests cover:
+  - Missing token (unauthorized)
+  - Invalid token (rejected)
+  - Valid token (request allowed)  
+- Ensures JWT authentication properly protects routes  
+- Located in `middleware/auth_test.go`
 
+
+### Running Tests
+Since we are using Docker, we need to run the tests in a containerized environment instead of locally: 
+```bash
+docker compose down
+docker compose run --rm backend go test -v ./...
+```
+If the tests are successful, you should see something similiar this in your terminal logs:
+```bash
+=== RUN   TestSignupHandler
+--- PASS: TestSignupHandler (0.08s)
+...
+PASS
+=== RUN   TestAuthMiddleware_ValidToken
+--- PASS: TestAuthMiddleware_ValidToken (0.00s)
+PASS
+```
 
 ### Modularization 
 The structure of the project is as follows:
