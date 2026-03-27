@@ -11,7 +11,30 @@ understanding of the Go syntax/language. As my comfort with go increased, I will
 vscode ai-generated tab completion and audit heavily in my workflows. 
 
 
+
 ### Workflow 
+I instructed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project. 
+Instead of offering every solution at once, we implemented each feature one at a time. ChatGPT would offer the generated 
+scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying
+and pasting. This allowed me to audit each line, especially since I am new to golang. 
+
+The workflow at a high level:
+
+
+1. Define Project Structure 
+    - 1.1. Create project directories/subdirectories
+        - /backend, /frontend, /db/... 
+    - 1.2. Create DB initialization script ```initalize.sql```
+    - 1.3. Create README.md
+2. Develop & Test Backend
+    - 2.1 Create server with generic endpoint in main()
+        - Containerize with Docker
+            - 2.1.1 Install Docker
+    - 2.1 Write Login/Signup Handlers and register them
+    - 2.2 JWT Session Logic
+    - 2.3 Middleware logic
+    - 2.4 Handler & Middleware Testing
+
 
 
 ## Using ChatGPT to learn GO
@@ -38,14 +61,14 @@ At the outset, ``backend/handlers/auth.go```
 I wanted to have a solid understanding of what  
 
 ## AI-Generated Code Shortfalls ⚠️
-### Abstraction
+### 1. Abstraction
 While AI quickly generated scripts for me, it often fell short in modularizing code, ChatGPT often suggested longer project files than I was comfortable with. 
 For example, in ```backend/handlers/auth.go``` where we handle our JSON logic for sending http requests
 to our handlers, ChatGPT generated scripts included logic for JWT session token generation as well
 as JSON response handling. I felt it important to abstract these duties out to separate files into
 utility modules, ```jwt.go``` and ```response.go```, respectively
 
-### Docker Debugging Hallucinations
+### 2. Docker Debugging Hallucinations
 ChatGPT started suggesting vebose strategies while I was debugging the ```/login``` endpoint in Postman and a *"connection refused error"* in docker. 
 AI suggested adding a for-loop in my initialization logic to ping the DB connection. After auditing this, my instinct told me this was overkill:
 
