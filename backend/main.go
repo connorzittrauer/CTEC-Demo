@@ -20,9 +20,10 @@ func main() {
 
 	database := db.InitializeDatabase()
 
-	// Define routes
+	// Register handlers
 	http.HandleFunc("/signup", handlers.SignupHandler(database))
 	http.HandleFunc("/login", handlers.LoginHandler(database))
+	http.HandleFunc("/logout", handlers.LogoutHandler())
 
 	// Protected route to test JWT middleware
 	http.HandleFunc("/protected", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {

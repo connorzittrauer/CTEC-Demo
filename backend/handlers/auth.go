@@ -215,7 +215,7 @@ func LogoutHandler() http.HandlerFunc {
 		}
 
 		utils.WriteJSONResponse(writer, http.StatusOK, map[string]string {
-			"message": "Logout successful. Please delete your token on the client side.",
+			"message": "Logout successful. ",
 		})
 	}
 }
