@@ -18,6 +18,7 @@ package middleware
 
 import (
 	"auth-app/utils"
+	"context"
 	"net/http"
 	"strings"
 	"github.com/golang-jwt/jwt/v5"
@@ -27,10 +28,10 @@ import (
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
-		// Get authorization header from the request
+		// Get Authorization header
 		authHeader := request.Header.Get("Authorization")
 
-		// Expect header format: "Bearer <token>"
+		// Expect "Bearer <token>"
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
 				"error": "Unauthorized",
@@ -38,24 +39,43 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		// Extract token string (remove "Bearer ")
+		// Extract token
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
-		// Parse and validate the token
+		// Parse token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return utils.GetJWTSecret(), nil 
-		})	
-
+			return utils.GetJWTSecret(), nil
+		})
 
 		if err != nil || !token.Valid {
-			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string {
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
 				"error": "Invalid token",
 			})
 			return
 		}
 
-		// Valid token, proceed to the next handler
-		next(writer, request)
+		// Extract claims
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
+				"error": "Invalid token claims",
+			})
+			return
+		}
 
+		// Extract email
+		email, ok := claims["email"].(string)
+		if !ok {
+			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
+				"error": "Invalid token payload",
+			})
+			return // ✅ CRITICAL FIX
+		}
+
+		// Add email to context
+		ctx := context.WithValue(request.Context(), "email", email)
+
+		// Call next handler ONCE with updated context
+		next(writer, request.WithContext(ctx))
 	}
 }

@@ -26,8 +26,12 @@ func main() {
 
 	// Protected route to test JWT middleware
 	http.HandleFunc("/protected", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+
+		email := r.Context().Value("email").(string)
+
 		utils.WriteJSONResponse(w, http.StatusOK, map[string]string{
 			"message": "You accessed a protected route!",
+			"email":   email,
 		})
 	}))
 
