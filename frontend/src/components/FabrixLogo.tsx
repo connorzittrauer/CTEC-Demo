@@ -1,3 +1,15 @@
+import { useMemo } from "react";
+
+/**
+ * FabrixLogo
+ *
+ * Renders a geometric, node-based house logo using SVG.
+ * Nodes are animated in a randomized sequence using CSS keyframes,
+ * creating a single “pulse” that traverses the structure.
+ *
+ * The traversal order is generated once on mount via a shuffled index map,
+ * ensuring visual variation without runtime overhead.
+ */
 function FabrixLogo() {
     const nodes = [
         // roof
@@ -37,8 +49,27 @@ function FabrixLogo() {
         [6, 7],
     ];
 
+    const STEP = 0.6;
+    const totalDuration = nodes.length * STEP;
+
+    const orderMap = useMemo(() => {
+        const arr = [...nodes.keys()];
+
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+
+        const map: Record<number, number> = {};
+        arr.forEach((nodeIndex, position) => {
+            map[nodeIndex] = position;
+        });
+
+        return map;
+    }, []);
+
     return (
-        <svg width="180" height="180" viewBox="0 0 100 100">
+        <svg width="200" height="200" viewBox="0 0 100 100">
 
             {/* CONNECTION LINES */}
             {connections.map(([a, b], i) => (
@@ -54,19 +85,23 @@ function FabrixLogo() {
             ))}
 
             {/* NODES */}
-            {nodes.map((node, i) => (
-                <circle
-                    key={i}
-                    cx={node.x}
-                    cy={node.y}
-                    r="3.5"
-                    className="node-wave"
-                    style={{
-                        animationDelay: `${node.y * 0.03}s`, // keep your directional wave
-                        animationDuration: `${2.8 + (i % 3) * 0.3}s`, // slight variation per node
-                    }}
-                />
-            ))}
+            {nodes.map((node, i) => {
+                const orderIndex = orderMap[i];
+
+                return (
+                    <circle
+                        key={i}
+                        cx={node.x}
+                        cy={node.y}
+                        r="3.5"
+                        className="node-wave"
+                        style={{
+                            animationDelay: `${orderIndex * STEP}s`,
+                            animationDuration: `${totalDuration}s`,
+                        }}
+                    />
+                );
+            })}
 
         </svg>
     );

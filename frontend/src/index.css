@@ -7,25 +7,23 @@ body {
   @apply bg-background text-text font-body;
 }
 
-
 .node-wave {
   fill: #7B7B7A;
-  animation: wave var(--duration, 3s) linear infinite;
+  animation: wave linear infinite;
 }
 
-/* Main wave */
 @keyframes wave {
   0% {
     fill: #7B7B7A;
     filter: none;
   }
 
-  12% {
+  5% {
     fill: #7A5CFF;
     filter: drop-shadow(0 0 8px #7A5CFF);
   }
 
-  25% {
+  10% {
     fill: #7B7B7A;
     filter: none;
   }
