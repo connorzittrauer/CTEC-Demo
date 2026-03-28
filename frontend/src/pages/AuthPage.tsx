@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
-
+import { login, signup } from "../api/auth";
 /**
  * AuthPage
  *
@@ -22,131 +22,214 @@ import AuthLayout from "../layouts/AuthLayout";
  * - Animation is triggered via React key + Tailwind classes
  */
 function AuthPage() {
-  // Auth mode state
-  const [mode, setMode] = useState<"login" | "signup">("login");
+    // Auth mode state
+    const [mode, setMode] = useState<"login" | "signup">("login");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-  // Form state
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  // Handle switching between login/signup
-  const handleModeChange = (newMode: "login" | "signup") => {
-    setMode(newMode);
-
-    // Reset form when switching modes
-    setForm({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+    // Form state
+    const [form, setForm] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
     });
-  };
 
-  // Strongly-typed field updates
-  const handleChange = (
-    field: keyof typeof form,
-    value: string
-  ) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+    // Handle switching between login/signup
+    const handleModeChange = (newMode: "login" | "signup") => {
+        setMode(newMode);
 
-  return (
-    <AuthLayout mode={mode} setMode={handleModeChange}>
-      
-      {/* 
+        setForm({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        });
+
+        setError("");
+    };
+
+    // Strongly-typed field updates
+    const handleChange = (
+        field: keyof typeof form,
+        value: string
+    ) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    const handleSubmit = async () => {
+        // Validation (unchanged)
+        if (!form.email || !form.password) {
+            setError("Email and password are required");
+            return;
+        }
+
+        if (
+            mode === "signup" &&
+            (!form.firstName || !form.lastName)
+        ) {
+            setError("All fields are required");
+            return;
+        }
+
+        setLoading(true);
+
+        const start = Date.now();
+
+        try {
+            let data;
+
+            if (mode === "login") {
+                data = await login(form.email, form.password);
+            } else {
+                data = await signup(
+                    form.firstName,
+                    form.lastName,
+                    form.email,
+                    form.password
+                );
+            }
+
+            setError("");
+            localStorage.setItem("token", data.token);
+
+        } catch (err: any) {
+            setError(err.message || "Something went wrong");
+        } finally {
+            const elapsed = Date.now() - start;
+            const minDuration = 300;
+
+            // Ensure loading lasts at least 300ms
+            if (elapsed < minDuration) {
+                setTimeout(() => setLoading(false), minDuration - elapsed);
+            } else {
+                setLoading(false);
+            }
+        }
+    };
+
+    return (
+        <AuthLayout mode={mode} setMode={handleModeChange}>
+
+            {/* 
         Animated container:
         - key={mode} forces React to re-render on mode change
         - Enables smooth transition between login/signup states
       */}
-      <div
-        key={mode}
-        className="
+            <div
+                key={mode}
+                className="
           transition-all
           duration-300
           ease-in-out
           animate-fade-slide
         "
-      >
-        
-        {/* HEADER TEXT */}
-        <h1 className="text-2xl font-heading mb-6 text-text">
-          {mode === "login"
-            ? "Login with e-mail and password"
-            : "Sign up to start building with Fabrix."}
-        </h1>
+            >
 
-        {/* FORM FIELDS */}
-        <div className="space-y-4">
-          
-          {/* Signup-only fields */}
-          {mode === "signup" && (
-            <>
-              <Input
-                placeholder="First name"
-                value={form.firstName}
-                onChange={(e) =>
-                  handleChange("firstName", e.target.value)
-                }
-              />
+                {/* HEADER TEXT */}
+                <h1 className="text-2xl font-heading mb-6 text-text">
+                    {mode === "login"
+                        ? "Login with e-mail and password"
+                        : "Sign up to start building with Fabrix."}
+                </h1>
 
-              <Input
-                placeholder="Last name"
-                value={form.lastName}
-                onChange={(e) =>
-                  handleChange("lastName", e.target.value)
-                }
-              />
-            </>
-          )}
+                {/* FORM FIELDS */}
+                <div className="space-y-4">
 
-          {/* Shared fields */}
-          <Input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) =>
-              handleChange("email", e.target.value)
-            }
-          />
+                    {/* Signup-only fields */}
+                    {mode === "signup" && (
+                        <>
+                            <Input
+                                placeholder="First name"
+                                value={form.firstName}
+                                onChange={(e) =>
+                                    handleChange("firstName", e.target.value)
+                                }
+                            />
 
-          <Input
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={(e) =>
-              handleChange("password", e.target.value)
-            }
-          />
-        </div>
+                            <Input
+                                placeholder="Last name"
+                                value={form.lastName}
+                                onChange={(e) =>
+                                    handleChange("lastName", e.target.value)
+                                }
+                            />
+                        </>
+                    )}
 
-        {/* SUBMIT BUTTON */}
-        <button
-          className="
-            mt-6
-            w-full
-            py-2
-            bg-accent
-            text-white
-            rounded-md
-            shadow-sm
-            transition
-            hover:bg-accent-hover
-          "
-        >
-          {mode === "login" ? "Login" : "Create Account"}
-        </button>
+                    {/* Shared fields */}
+                    <Input
+                        type="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={(e) =>
+                            handleChange("email", e.target.value)
+                        }
+                    />
 
-      </div>
+                    <Input
+                        type="password"
+                        placeholder="Password"
+                        value={form.password}
+                        onChange={(e) =>
+                            handleChange("password", e.target.value)
+                        }
+                    />
+                </div>
 
-    </AuthLayout>
-  );
+                {/* Error tooltip */}
+                <div className="mt-2">
+                    {error && (
+                        <p
+                            className="
+                text-red-500 text-sm
+                animate-fade-slide
+                            "
+                        >
+                            ⚠ {error}
+                        </p>
+                    )}
+                </div>
+
+                {/* SUBMIT BUTTON */}
+                <div
+                    className={`
+                    mt-6
+                    transition-all duration-300 ease-in-out
+                    ${error && !loading ? "translate-y-2" : "translate-y-0"}
+                    `}
+                >
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="
+                            w-full
+                            py-2
+                            bg-accent
+                            text-white
+                            rounded-md
+                            shadow-sm
+                            transition
+                            hover:bg-accent-hover
+                            disabled:opacity-50
+                            flex items-center justify-center gap-2
+                        "
+                    >
+                        {loading ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            mode === "login" ? "Login" : "Create Account"
+                        )}
+                    </button>
+                </div>
+
+            </div>
+
+        </AuthLayout>
+    );
 }
 
 export default AuthPage;
