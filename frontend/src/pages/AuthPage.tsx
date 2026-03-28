@@ -151,40 +151,32 @@ function AuthPage() {
                     {mode === "signup" && (
                         <>
                             <Input
-                                placeholder="First name"
+                                label="First name"
                                 value={form.firstName}
-                                onChange={(e) =>
-                                    handleChange("firstName", e.target.value)
-                                }
+                                onChange={(e) => handleChange("firstName", e.target.value)}
                             />
 
                             <Input
-                                placeholder="Last name"
+                                label="Last name"
                                 value={form.lastName}
-                                onChange={(e) =>
-                                    handleChange("lastName", e.target.value)
-                                }
+                                onChange={(e) => handleChange("lastName", e.target.value)}
                             />
                         </>
                     )}
 
                     {/* Shared fields */}
                     <Input
+                        label="Email"
                         type="email"
-                        placeholder="Email"
                         value={form.email}
-                        onChange={(e) =>
-                            handleChange("email", e.target.value)
-                        }
+                        onChange={(e) => handleChange("email", e.target.value)}
                     />
 
                     <Input
+                        label="Password"
                         type="password"
-                        placeholder="Password"
                         value={form.password}
-                        onChange={(e) =>
-                            handleChange("password", e.target.value)
-                        }
+                        onChange={(e) => handleChange("password", e.target.value)}
                     />
                 </div>
 
