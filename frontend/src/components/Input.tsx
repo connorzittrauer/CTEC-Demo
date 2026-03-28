@@ -1,7 +1,5 @@
-import type { ChangeEvent } from "react";
-
 /**
- * Input
+ * Input.tsx
  *
  * Reusable controlled input component.
  *
