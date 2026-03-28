@@ -27,14 +27,14 @@ export default {
         heading: ["Space Grotesk", "sans-serif"],
         body: ["IBM Plex Sans", "sans-serif"],
       },
-    },
-    animation: {
-      "fade-slide": "fadeSlide 0.4s ease-in-out"
-    },
-    keyframes: {
-      fadeSlide: {
-        "0%": { opacity: 0, transform: "translateY(8px)" },
-        "100%": { opacity: 1, transform: "translateY(0)" },
+      animation: {
+        "fade-slide": "fadeSlide 0.4s ease-in-out"
+      },
+      keyframes: {
+        fadeSlide: {
+          "0%": { opacity: 0, transform: "translateY(8px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
       },
     },
   },
