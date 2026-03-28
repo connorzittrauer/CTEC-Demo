@@ -7,11 +7,15 @@ function AuthPage() {
     return (
         <AuthLayout mode={mode} setMode={setMode}>
 
-            {/* ANIMATED CONTENT WRAPPER */}
+            {/* This animates our modal content when switching between login and signup */}
             <div
                 key={mode}
-                className="transition-all duration-200 ease-in-out"
+                className="
+                    transition-all duration-300 ease-in-out
+                    animate-fade-slide
+                    "
             >
+                {/* Modal render login/sign up tips */}
                 <h1 className="text-2xl font-heading mb-6 text-text">
                     {mode === "login"
                         ? "Login with e-mail and password"
