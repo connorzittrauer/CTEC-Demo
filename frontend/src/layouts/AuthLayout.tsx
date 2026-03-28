@@ -80,8 +80,8 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
           {/* LOGO GOES HERE */}
           <div className="text-center">
             <FabrixLogo />
-            <h2 className="font-heading text-xl text-text tracking-wide">
-              FABRIX.
+            <h2 className="font-heading text-xl text-gray-500 font-medium tracking-wide">
+              F A B R I X
             </h2>
           </div>
           

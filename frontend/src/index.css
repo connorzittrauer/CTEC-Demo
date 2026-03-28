@@ -19,17 +19,17 @@ body {
   }
 
   5% {
-    fill: #7A5CFF;
-    filter: drop-shadow(0 0 8px #7A5CFF);
+    fill: #ff5c5c;
+    filter: drop-shadow(0 0 8px #ff5c5c);
   }
 
   10% {
-    fill: #7B7B7A;
+    fill: #7b7a7a;
     filter: none;
   }
 
   100% {
-    fill: #7B7B7A;
+    fill: #7b7a7a;
     filter: none;
   }
 }
