@@ -6,3 +6,32 @@
 body {
   @apply bg-background text-text font-body;
 }
+
+/* Base node */
+.node {
+  fill: #7B7B7A;
+  animation: nodeGlow 2.5s linear infinite;
+}
+
+/* Traveling glow */
+@keyframes nodeGlow {
+  0% {
+    fill: #7B7B7A;
+    filter: none;
+  }
+
+  20% {
+    fill: #7A5CFF;
+    filter: drop-shadow(0 0 6px #7A5CFF);
+  }
+
+  40% {
+    fill: #7B7B7A;
+    filter: none;
+  }
+
+  100% {
+    fill: #7B7B7A;
+    filter: none;
+  }
+}

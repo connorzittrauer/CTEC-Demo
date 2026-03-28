@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import FabrixLogo from "../components/FabrixLogo";
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -78,12 +79,12 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
 
           {/* LOGO GOES HERE */}
           <div className="text-center">
-            <div className="w-24 h-24 bg-secondary rounded-full mb-4 mx-auto" />
-            {/* <h2 className="font-heading text-xl text-secondary tracking-wide">
+            <FabrixLogo />
+            <h2 className="font-heading text-xl text-text tracking-wide">
               FABRIX.
-            </h2> */}
+            </h2>
           </div>
-
+          
         </div>
       </div>
     </div>
