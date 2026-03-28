@@ -1,3 +1,8 @@
+# FRABIX - Tiny Home 3D Printing
+## Concept 
+## ExDesign choices
+
+
 # Tools/Libaries Used
 ## Air 
 For hot reloading Go
