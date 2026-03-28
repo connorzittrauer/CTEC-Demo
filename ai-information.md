@@ -10,7 +10,11 @@ get a feel for Go syntax when writing my files, even if I was copying from ChatG
 understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
 vscode ai-generated tab completion and audit heavily in my workflows. 
 
-
+### Copilot (VSCode)
+- Debugging Tailwind
+    - I do most of my CSS debugging in the browswer console or by hand in the code, but 
+      I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
+        - I would highlight the snippet and prompt at fix
 
 ### Workflow 
 I instructed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project. 

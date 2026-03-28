@@ -65,12 +65,13 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
 
         </div>
 
-          {/* LOGO GOES HERE */}
-          <div className="text-center">
+          {/* Righthand pane app log + description */}
+          <div className="flex flex-col items-center justify-center text-center px-6">
             <FabrixLogo />
-            <h2 className="font-heading text-xl text-gray-500 font-medium tracking-wide">
+            <h2 className="font-heading text-2xl text-gray-500 font-medium tracking-wide">
               F A B R I X
             </h2>
+            <p className="mt-4 text-lg text-gray-400  italic">3D Print your dream home. Bit by bit.</p>
           </div>
           
         </div>
