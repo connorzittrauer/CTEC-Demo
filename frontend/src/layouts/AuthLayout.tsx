@@ -71,8 +71,8 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
                             <button
                                 onClick={() => setMode("login")}
                                 className={`px-4 py-1.5 transition-colors duration-200 rounded-md ${mode === "login"
-                                        ? "bg-accent hover:bg-accent-hover text-white"
-                                        : "text-text bg-transparent hover:bg-gray-100"
+                                    ? "bg-accent hover:bg-accent-hover text-white"
+                                    : "text-text bg-transparent hover:bg-gray-100"
                                     }`}
                             >
                                 Login
@@ -82,8 +82,8 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
                             <button
                                 onClick={() => setMode("signup")}
                                 className={`px-4 py-1.5 transition-colors duration-200 rounded-md ${mode === "signup"
-                                        ? "bg-accent hover:bg-accent-hover text-white"
-                                        : "text-text bg-transparent hover:bg-gray-100"
+                                    ? "bg-accent hover:bg-accent-hover text-white"
+                                    : "text-text bg-transparent hover:bg-gray-100"
                                     }`}
                             >
                                 Signup

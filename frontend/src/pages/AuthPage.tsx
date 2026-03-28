@@ -111,6 +111,14 @@ function AuthPage() {
         }
     };
 
+    const isFormValid =
+        mode === "login"
+            ? form.email.trim() !== "" && form.password.trim() !== ""
+            : form.firstName.trim() !== "" &&
+            form.lastName.trim() !== "" &&
+            form.email.trim() !== "" &&
+            form.password.trim() !== "";
+
     return (
         <AuthLayout mode={mode} setMode={handleModeChange}>
 
@@ -197,14 +205,14 @@ function AuthPage() {
                 {/* SUBMIT BUTTON */}
                 <div
                     className={`
-                    mt-6
+                    mt-2
                     transition-all duration-300 ease-in-out
                     ${error && !loading ? "translate-y-2" : "translate-y-0"}
                     `}
                 >
                     <button
                         onClick={handleSubmit}
-                        disabled={loading}
+                        disabled={loading || !isFormValid}
                         className="
                             w-full
                             py-2
@@ -215,8 +223,9 @@ function AuthPage() {
                             transition
                             hover:bg-accent-hover
                             disabled:opacity-50
-                            flex items-center justify-center gap-2
-                        "
+                            disabled:cursor-not-allowed
+                            flex items-center justify-center
+                            "
                     >
                         {loading ? (
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
