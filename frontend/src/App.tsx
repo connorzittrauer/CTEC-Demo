@@ -1,12 +1,14 @@
 import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/AuthPage';
+import SignupPage from './pages/SignupPage';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-heading text-accent">
-        Fabrix Auth
-      </h1>
-    </div>
+    <Routes>
+
+    </Routes>
   );
 }
 

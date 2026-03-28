@@ -55,7 +55,9 @@ Golang concepts I learned while building out the backend:
       I structured my project as to adhere to D.R.Y (don't repeat yourself) and Single Responsibilty design practices. Such 
       that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly h
 
-### Learning Go
+## Learning Go
+### Explanatory Code Snippets
+
 Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. 
 At the outset, ``backend/handlers/auth.go```
 I wanted to have a solid understanding of what  
@@ -95,3 +97,8 @@ func InitializeDatabase() *sql.DB {
 ```
 The ultimate solution resulted from a duplicate instance of docker running. I ran ```docker prune``` and restarted the docker containers, and the
 issue resolved itself. This shows the importance of **auditing AI-generated solutions/debugging**. 
+
+### 3. Incorrect /route definitions
+talk about how you instructe chatgpt that you wanted a modal login page, but it gave you unecssary routes for /login and /signup 
+before you decided to switch to a singular /auth route. This demonstrates the necessary to audit AI-generated code before implementation. 
+This could have generated too much boilerplate for later cleanup. 
