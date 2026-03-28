@@ -26,6 +26,18 @@ function AuthPage() {
     const [mode, setMode] = useState<"login" | "signup">("login");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [errors, setErrors] = useState({
+        login: {
+            email: "",
+            password: "",
+        },
+        signup: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        },
+    });
 
     // Form state
     const [form, setForm] = useState({
@@ -34,6 +46,11 @@ function AuthPage() {
         email: "",
         password: "",
     });
+
+    // Validate the email format using a simple regex
+    const validateEmail = (email: string) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
 
     // Handle switching between login/signup
     const handleModeChange = (newMode: "login" | "signup") => {
@@ -46,6 +63,20 @@ function AuthPage() {
             password: "",
         });
 
+        setErrors((prev) => ({
+            ...prev,
+            [newMode]: {
+                ...(newMode === "login"
+                    ? { email: "", password: "" }
+                    : {
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        password: "",
+                    }),
+            },
+        }));
+
         setError("");
     };
 
@@ -57,6 +88,39 @@ function AuthPage() {
         setForm((prev) => ({
             ...prev,
             [field]: value,
+        }));
+
+        // Validation
+        let error = "";
+
+        if (field === "email") {
+            if (!value) {
+                error = "Email is required";
+            } else if (!validateEmail(value)) {
+                error = "Please enter a valid email";
+            }
+        }
+
+        if (field === "password") {
+            if (!value) {
+                error = "Password is required";
+            }
+        }
+
+        if (field === "firstName" && mode === "signup") {
+            if (!value) error = "First name is required";
+        }
+
+        if (field === "lastName" && mode === "signup") {
+            if (!value) error = "Last name is required";
+        }
+
+        setErrors((prev) => ({
+            ...prev,
+            [mode]: {
+                ...prev[mode],
+                [field]: error,
+            },
         }));
     };
 
@@ -111,13 +175,18 @@ function AuthPage() {
         }
     };
 
+    const currentErrors = errors[mode];
+
     const isFormValid =
-        mode === "login"
-            ? form.email.trim() !== "" && form.password.trim() !== ""
-            : form.firstName.trim() !== "" &&
-            form.lastName.trim() !== "" &&
-            form.email.trim() !== "" &&
-            form.password.trim() !== "";
+        Object.values(currentErrors).every((e) => e === "") &&
+        (
+            mode === "login"
+                ? form.email && form.password
+                : form.firstName &&
+                form.lastName &&
+                form.email &&
+                form.password
+        );
 
     return (
         <AuthLayout mode={mode} setMode={handleModeChange}>
@@ -154,12 +223,14 @@ function AuthPage() {
                                 label="First name"
                                 value={form.firstName}
                                 onChange={(e) => handleChange("firstName", e.target.value)}
+                                error={errors.signup.firstName}
                             />
 
                             <Input
                                 label="Last name"
                                 value={form.lastName}
                                 onChange={(e) => handleChange("lastName", e.target.value)}
+                                error={errors.signup.lastName}
                             />
                         </>
                     )}
@@ -170,6 +241,7 @@ function AuthPage() {
                         type="email"
                         value={form.email}
                         onChange={(e) => handleChange("email", e.target.value)}
+                        error={currentErrors.email}
                     />
 
                     <Input
@@ -177,6 +249,7 @@ function AuthPage() {
                         type="password"
                         value={form.password}
                         onChange={(e) => handleChange("password", e.target.value)}
+                        error={currentErrors.password}
                     />
                 </div>
 
