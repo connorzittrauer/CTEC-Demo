@@ -60,9 +60,10 @@ function FabrixLogo() {
                     cx={node.x}
                     cy={node.y}
                     r="3.5"
-                    className="node"
+                    className="node-wave"
                     style={{
-                        animationDelay: `${i * 0.2}s`, // controls wave speed/direction
+                        animationDelay: `${node.y * 0.03}s`, // keep your directional wave
+                        animationDuration: `${2.8 + (i % 3) * 0.3}s`, // slight variation per node
                     }}
                 />
             ))}

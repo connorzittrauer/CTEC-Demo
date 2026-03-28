@@ -7,25 +7,25 @@ body {
   @apply bg-background text-text font-body;
 }
 
-/* Base node */
-.node {
+
+.node-wave {
   fill: #7B7B7A;
-  animation: nodeGlow 2.5s linear infinite;
+  animation: wave var(--duration, 3s) linear infinite;
 }
 
-/* Traveling glow */
-@keyframes nodeGlow {
+/* Main wave */
+@keyframes wave {
   0% {
     fill: #7B7B7A;
     filter: none;
   }
 
-  20% {
+  12% {
     fill: #7A5CFF;
-    filter: drop-shadow(0 0 6px #7A5CFF);
+    filter: drop-shadow(0 0 8px #7A5CFF);
   }
 
-  40% {
+  25% {
     fill: #7B7B7A;
     filter: none;
   }
