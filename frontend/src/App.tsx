@@ -1,13 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { isAuthenticated } from "./utils/auth";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
+      
+      {/* Auth route */}
+      <Route
+        path="/auth"
+        element={
+          isAuthenticated()
+            ? <Navigate to="/dashboard" replace />
+            : <AuthPage />
+        }
+      />
 
+      {/* Protected route */}
       <Route
         path="/dashboard"
         element={
@@ -16,6 +27,13 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* Root redirect */}
+      <Route path="/" element={<Navigate to="/auth" replace />} />
+
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/auth" replace />} />
+
     </Routes>
   );
 }
