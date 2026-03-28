@@ -28,7 +28,7 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
           </div>
         </div>
 
-        {/* RIGHT SIDE — BRANDING + TOGGLE */}
+        {/* Righthand pane: Branding + Toggle */}
         <div className="
           w-1/2 
           bg-surface 
@@ -41,7 +41,7 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
         ">
 
 
-        {/* Right pane toggle menu*/}
+        {/* Right pane: Toggle*/}
         <div className="absolute top-6 right-6">
         
         <div className="flex bg-surface text-lg rounded-md p-1 gap-2">
