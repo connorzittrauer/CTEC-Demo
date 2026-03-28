@@ -1,7 +1,13 @@
 import { useState } from "react";
+import { useEffect } from "react";
+import { isAuthenticated } from "../utils/auth";
+import { login, signup } from "../api/auth";
+import { useNavigate } from "react-router-dom";
+import { setToken } from "../utils/auth";
 import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
-import { login, signup } from "../api/auth";
+
+
 import {
   validateEmail,
   validatePassword,
@@ -32,6 +38,13 @@ function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -142,7 +155,10 @@ function AuthPage() {
             );
 
       setError("");
-      localStorage.setItem("token", data.token);
+      
+      setToken(data.token);
+      navigate("/dashboard");
+
     } catch (err: any) {
       setError(err.message || "Something went wrong");
     } finally {
