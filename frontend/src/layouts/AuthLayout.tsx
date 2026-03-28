@@ -41,7 +41,7 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
         ">
 
 
-        {/* TOP RIGHT TOGGLE */}
+        {/* Right pane toggle menu*/}
         <div className="absolute top-6 right-6">
         
         <div className="flex bg-surface text-lg rounded-md p-1 gap-2">
