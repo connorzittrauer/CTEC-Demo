@@ -20,7 +20,8 @@ body {
 
   5% {
     fill: #ff5c5c;
-    filter: drop-shadow(0 0 8px #ff5c5c);
+    /* filter: drop-shadow(0 0 8px #ff5c5c); */
+    /* filter: drop-shadow(0 0 2px #ff5c5c); */
   }
 
   10% {

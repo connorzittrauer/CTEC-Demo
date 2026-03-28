@@ -18,7 +18,6 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
         bg-background
         rounded-2xl 
         shadow-lg 
-        overflow-hidden 
         flex
       ">
         
@@ -45,32 +44,21 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
         {/* TOP RIGHT TOGGLE */}
         <div className="absolute top-6 right-6">
         
-        <div className="flex bg-white border border-border rounded-md overflow-hidden text-sm shadow-sm ">
-            
+        <div className="flex bg-surface text-lg rounded-md p-1 gap-2">
             {/* LOGIN */}
             <button
-            onClick={() => setMode("login")}
-            className={`
-                px-4 py-1.5 transition-all duration-200 
-                ${mode === "login"
-                ? "bg-accent hover:bg-accent-hover  text-white "
-                : "text-text hover:bg-gray-100 " }
-            `}
+              onClick={() => setMode("login")}
+              className={`px-4 py-1.5 transition-colors duration-200 rounded-md ${mode === "login" ? "bg-accent hover:bg-accent-hover text-white" : "text-text bg-transparent hover:bg-gray-100"}`}
             >
-            Login
+              Login
             </button>
 
             {/* SIGNUP */}
             <button
-            onClick={() => setMode("signup")}
-            className={`
-                px-4 py-1.5 transition-all duration-200
-                ${mode === "signup"
-                ? "bg-accent text-white hover:bg-accent-hover "
-                : "text-text hover:bg-gray-100"}
-            `}
+              onClick={() => setMode("signup")}
+              className={`px-4 py-1.5 transition-colors duration-200 rounded-md ${mode === "signup" ? "bg-accent hover:bg-accent-hover text-white" : "text-text bg-transparent hover:bg-gray-100"}`}
             >
-            Signup
+              Signup
             </button>
 
         </div>

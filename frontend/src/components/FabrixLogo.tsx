@@ -80,7 +80,7 @@ function FabrixLogo() {
                     x2={nodes[b].x}
                     y2={nodes[b].y}
                     stroke="#C0C0C0"
-                    strokeWidth="1.5"
+                    strokeWidth="1"
                 />
             ))}
 
@@ -93,12 +93,13 @@ function FabrixLogo() {
                         key={i}
                         cx={node.x}
                         cy={node.y}
-                        r="3.5"
+                        r="4"
                         className="node-wave"
                         style={{
                             animationDelay: `${orderIndex * STEP}s`,
                             animationDuration: `${totalDuration}s`,
                         }}
+
                     />
                 );
             })}
