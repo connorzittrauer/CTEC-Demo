@@ -20,13 +20,15 @@ func main() {
 
 	database := db.InitializeDatabase()
 
+	mux := http.NewServeMux()
+
 	// Register handlers
-	http.HandleFunc("/signup", handlers.SignupHandler(database))
-	http.HandleFunc("/login", handlers.LoginHandler(database))
-	http.HandleFunc("/logout", handlers.LogoutHandler())
+	mux.HandleFunc("/signup", handlers.SignupHandler(database))
+	mux.HandleFunc("/login", handlers.LoginHandler(database))
+	mux.HandleFunc("/logout", handlers.LogoutHandler())
 
 	// Protected route to test JWT middleware
-	http.HandleFunc("/protected", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/protected", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 
 		email := r.Context().Value("email").(string)
 
@@ -37,5 +39,5 @@ func main() {
 	}))
 
 	log.Println("Server starting on port 8080...")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", middleware.EnableCORS(mux))
 }

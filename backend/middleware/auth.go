@@ -69,7 +69,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			utils.WriteJSONResponse(writer, http.StatusUnauthorized, map[string]string{
 				"error": "Invalid token payload",
 			})
-			return // ✅ CRITICAL FIX
+			return 
 		}
 
 		// Add email to context

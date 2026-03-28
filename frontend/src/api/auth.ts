@@ -43,7 +43,8 @@ export async function signup(
   });
 
   if (!res.ok) {
-    throw new Error("Signup failed");
+    const err = await res.json();
+    throw new Error(err.error || "Signup failed");
   }
 
   return res.json();

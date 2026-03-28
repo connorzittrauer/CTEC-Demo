@@ -121,9 +121,6 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 		var user models.User
 
-		// Decodes our JSON request into the User struct for error handling and validation
-		err := json.NewDecoder(request.Body).Decode(&user)
-
 		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
 			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
@@ -131,6 +128,9 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			})
 			return
 		}
+
+		// Decodes our JSON request into the User struct for error handling and validation
+		err := json.NewDecoder(request.Body).Decode(&user)
 
 		/**
 		* Handles bad JSON formats
