@@ -200,7 +200,13 @@ I find it is very important to modularize your code, so that no one class
 is either a) assuming too many responsibilities or b) we are not repeating code
 
 ### Design References
+#### Stripe (Auth Page Animations)
+- Signup button vertical shift animation 
+- Signup button disabled on empty fields
+#### Dribble (Auth Page Splitscreen)
 https://dribbble.com/shots/4013348-Login-web-splitscreen
 https://piktochart.com/tips/industrial-color-palette
+https://dashboard.stripe.com/login
+### 
 
 ## Demo 
