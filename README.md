@@ -199,4 +199,8 @@ The structure of the project is as follows:
 I find it is very important to modularize your code, so that no one class 
 is either a) assuming too many responsibilities or b) we are not repeating code
 
+### Design References
+https://dribbble.com/shots/4013348-Login-web-splitscreen
+https://piktochart.com/tips/industrial-color-palette
+
 ## Demo 
