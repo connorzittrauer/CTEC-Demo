@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
 
 /**
@@ -6,25 +7,58 @@ import AuthLayout from "../layouts/AuthLayout";
  *
  * Top-level authentication page that manages:
  * - Login vs Signup mode state
+ * - Controlled form state
  * - Conditional rendering of form fields
  * - Animated transitions between modes
  *
  * Responsibilities:
- * - Holds UI state (mode)
+ * - Holds UI state (mode + form data)
  * - Passes control to AuthLayout (presentation layer)
  * - Renders form inputs based on current mode
  *
  * Notes:
  * - No API calls yet (added in next step)
- * - Inputs are currently uncontrolled (will be refactored soon)
+ * - Inputs are controlled via React state
  * - Animation is triggered via React key + Tailwind classes
  */
 function AuthPage() {
-  // Controls whether we are in login or signup mode
+  // Auth mode state
   const [mode, setMode] = useState<"login" | "signup">("login");
 
+  // Form state
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  // Handle switching between login/signup
+  const handleModeChange = (newMode: "login" | "signup") => {
+    setMode(newMode);
+
+    // Reset form when switching modes
+    setForm({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    });
+  };
+
+  // Strongly-typed field updates
+  const handleChange = (
+    field: keyof typeof form,
+    value: string
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return (
-    <AuthLayout mode={mode} setMode={setMode}>
+    <AuthLayout mode={mode} setMode={handleModeChange}>
       
       {/* 
         Animated container:
@@ -54,62 +88,41 @@ function AuthPage() {
           {/* Signup-only fields */}
           {mode === "signup" && (
             <>
-              <input
-                type="text"
+              <Input
                 placeholder="First name"
-                className="
-                  h-10
-                  w-full
-                  px-3
-                  bg-surface
-                  rounded-md
-                  placeholder:text-gray-400
-                  focus:outline-none
-                "
+                value={form.firstName}
+                onChange={(e) =>
+                  handleChange("firstName", e.target.value)
+                }
               />
-              <input
-                type="text"
+
+              <Input
                 placeholder="Last name"
-                className="
-                  h-10
-                  w-full
-                  px-3
-                  bg-surface
-                  rounded-md
-                  placeholder:text-gray-400
-                  focus:outline-none
-                "
+                value={form.lastName}
+                onChange={(e) =>
+                  handleChange("lastName", e.target.value)
+                }
               />
             </>
           )}
 
           {/* Shared fields */}
-          <input
+          <Input
             type="email"
             placeholder="Email"
-            className="
-              h-10
-              w-full
-              px-3
-              bg-surface
-              rounded-md
-              placeholder:text-gray-400
-              focus:outline-none
-            "
+            value={form.email}
+            onChange={(e) =>
+              handleChange("email", e.target.value)
+            }
           />
 
-          <input
+          <Input
             type="password"
             placeholder="Password"
-            className="
-              h-10
-              w-full
-              px-3
-              bg-surface
-              rounded-md
-              placeholder:text-gray-400
-              focus:outline-none
-            "
+            value={form.password}
+            onChange={(e) =>
+              handleChange("password", e.target.value)
+            }
           />
         </div>
 

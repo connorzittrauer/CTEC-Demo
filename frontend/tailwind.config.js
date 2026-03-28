@@ -29,7 +29,7 @@ export default {
       },
     },
     animation: {
-      "fade-slide": "fadeSlide 0.3s ease-in-out"
+      "fade-slide": "fadeSlide 0.4s ease-in-out"
     },
     keyframes: {
       fadeSlide: {
