@@ -28,16 +28,18 @@ function ToastAlert() {
   useEffect(() => {
     if (!incomingToast) return;
 
-    // Persist the value BEFORE clearing navigation state
+    // Persist the value and start the auto-dismiss timer. We intentionally
+    // clear the navigation state only after the timer fires so that the
+    // effect's cleanup (which runs when location.state changes) does not
+    // cancel the timer prematurely.
     setToastType(incomingToast);
     setShowToast(true);
-
-    // Clear navigation state so it doesn't re-trigger
-    navigate(".", { replace: true, state: {} });
 
     const timer = setTimeout(() => {
       setShowToast(false);
       setToastType(null); // cleanup
+      // Clear navigation state after the toast has been dismissed
+      navigate(".", { replace: true, state: {} });
     }, 2500);
 
     return () => clearTimeout(timer);

@@ -1,16 +1,41 @@
 import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { apiFetch } from "../api/client";
 import ToastAlert from "../components/ToastAlert";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const handleLogout = () => {
     removeToken();
     navigate("/auth", { replace: true });
   };
 
+  useEffect(() => {
+    const fetchProtected = async () => {
+      try {
+        const data = await apiFetch("/protected", {
+          method: "GET",
+          auth: true,
+        });
+
+        setEmail(data.email);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProtected();
+  }, []);
+
   return (
+
     <>
       {/* Toast Component */}
       <ToastAlert />
@@ -18,7 +43,15 @@ function Dashboard() {
       <div className="min-h-screen flex flex-col items-center justify-center gap-6">
         <h1 className="text-2xl font-heading">Dashboard</h1>
 
-        <p className="text-text">You are logged in.</p>
+        {loading && <p className="text-text">Loading...</p>}
+        {error && (
+          <p className="text-red-500">⚠ {error}</p>
+        )}
+        {email && (
+          <p className="text-text">
+            Logged in as: <span className="font-medium">{email}</span>
+          </p>
+        )}
 
         <button
           onClick={handleLogout}
