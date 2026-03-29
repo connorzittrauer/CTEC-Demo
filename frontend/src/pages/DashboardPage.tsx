@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../api/user";
 import ToastAlert from "../components/ToastAlert";
+import BuildProgressCard from "../components/BuildProgressCard";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -36,17 +37,19 @@ function Dashboard() {
       {/* Toast Component */}
       <ToastAlert />
 
-      <div className="min-h-screen flex flex-col items-center justify-center gap-6">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-8">
         <h1 className="text-2xl font-heading">Dashboard</h1>
 
         {loading && <p className="text-text">Loading...</p>}
+        <div className="flex flex-col items-center gap-6">
+          {email && (
+            <p className="text-text">
+              Logged in as: <span className="font-medium">{email}</span>
+            </p>
+          )}
 
-        {email && (
-          <p className="text-text">
-            Logged in as: <span className="font-medium">{email}</span>
-          </p>
-        )}
-
+          <BuildProgressCard />
+        </div>
         <button
           onClick={handleLogout}
           className="
