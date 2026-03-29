@@ -102,6 +102,28 @@ func InitializeDatabase() *sql.DB {
 The ultimate solution resulted from a duplicate instance of docker running. I ran ```docker prune``` and restarted the docker containers, and the
 issue resolved itself. This shows the importance of **auditing AI-generated solutions/debugging**. 
 
+### 3. Overengineered Solutions
+ChatGPT can sometimes offer over-engineered solutions to problems. While I was testing the `/Signup` form in the frontend, I asked it
+what **convention** would dictate be the best error message to send when a user tries to sign up with a duplicate email. We were already sending
+a JSON error message from the backend in our `/handlers`: 
+```go
+if err != nil {
+    utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
+        "error": "User may already exist",
+    })
+    return
+}
+```
+ChatGPT recommended instead to modfy the *frontend*  check the error message, and map it to a different message
+```typescript
+if (err.message.includes("Email already registered")) {
+setError("An account with this email already exists.");
+    }
+```
+This is overengineered an unecssary as all we needed to do was update the backend error message.  This shows the importance of **auditing AI-generated solutions/debugging** to avoid adding unnecessary complexity. When pointed out, ChatGPT acknowledged this was bad practice. 
+
+Why did you suggest changing it in the front? Why not just change it in the auth.,go? Here: if err != nil { utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{ "error": "User may already exist", }) return
+
 ### 3. Incorrect /route definitions
 talk about how you instructe chatgpt that you wanted a modal login page, but it gave you unecssary routes for /login and /signup 
 before you decided to switch to a singular /auth route. This demonstrates the necessary to audit AI-generated code before implementation. 

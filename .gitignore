@@ -35,6 +35,8 @@ pnpm-debug.log*
 # Build artifacts
 /bin/
 /tmp/
+backend/tmp/
+/tmp
 *.exe
 *.exe~
 *.dll

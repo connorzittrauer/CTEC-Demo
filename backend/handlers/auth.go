@@ -8,6 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strings"
+	"github.com/lib/pq"
 )
 
 /* LoginHandler handles the login process for existing users to
@@ -185,9 +186,18 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			string(hashedPassword),
 		)
 
+		// Checks if a user tries to register with an email that already exists in the database
 		if err != nil {
+			// Check for unique constraint violation
+			if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+				utils.WriteJSONResponse(writer, http.StatusConflict, map[string]string{
+					"error": "Email already registered",
+				})
+				return
+			}
+
 			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
-				"error": "User may already exist",
+				"error": "Internal server error",
 			})
 			return
 		}
