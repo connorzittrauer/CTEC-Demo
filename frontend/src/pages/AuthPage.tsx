@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { setToken } from "../utils/auth";
 import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
-
-
 import {
     validateEmail,
     validatePassword,
@@ -55,12 +53,7 @@ function AuthPage() {
         },
     });
 
-    // If the user is authetnicated, redirect to dashboard
-    useEffect(() => {
-        if (isAuthenticated()) {
-            navigate("/dashboard", { replace: true });
-        }
-    }, [navigate]);
+
 
     // ------------------------
     // DERIVED STATE
@@ -156,7 +149,9 @@ function AuthPage() {
             setError("");
 
             setToken(data.token);
-            navigate("/dashboard");
+            navigate("/dashboard", {
+                state: { toast: "login-success" },
+            });
 
         } catch (err: any) {
             setError(err.message || "Something went wrong");
