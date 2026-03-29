@@ -17,5 +17,11 @@ export const removeToken = () => {
 };
 
 export const isAuthenticated = () => {
-  return !!getToken();
+  const token = getToken();
+
+  return (
+    !!token &&
+    token !== "undefined" &&
+    token !== "null"
+  );
 };
