@@ -116,7 +116,7 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
             </h2>
 
             <p className="mt-4 text-lg text-gray-400 italic">
-              3D print your dream home. Bit by bit.
+              3D print your tiny home. Pixel by pixel.
             </p>
           </div>
 
