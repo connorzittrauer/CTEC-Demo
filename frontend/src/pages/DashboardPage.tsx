@@ -1,11 +1,8 @@
 import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { apiFetch } from "../api/client";
-import ToastAlert from "../components/ToastAlert";
 import { getCurrentUser } from "../api/user";
-
-
+import ToastAlert from "../components/ToastAlert";
 
 function Dashboard() {
   const navigate = useNavigate();

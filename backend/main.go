@@ -4,7 +4,6 @@ import (
 	"auth-app/db"
 	"auth-app/handlers"
 	"auth-app/middleware"
-	"auth-app/utils"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
@@ -28,15 +27,9 @@ func main() {
 	mux.HandleFunc("/logout", handlers.LogoutHandler())
 
 	// Protected route to test JWT middleware
-	mux.HandleFunc("/me", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/me", middleware.AuthMiddleware(handlers.MeHandler(database)))
 
-		email := r.Context().Value("email").(string)
 
-		utils.WriteJSONResponse(w, http.StatusOK, map[string]string{
-			"message": "You accessed a protected route!",
-			"email":   email,
-		})
-	}))
 
 	log.Println("Server starting on port 8080...")
 	http.ListenAndServe(":8080", middleware.EnableCORS(mux))

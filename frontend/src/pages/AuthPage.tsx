@@ -200,7 +200,7 @@ function AuthPage() {
                 {/* HEADER */}
                 <h1 className="text-2xl font-heading mb-6 text-text">
                     {mode === "login"
-                        ? "Login to your workspace."
+                        ? "Login to your homespace."
                         : "Sign up to start building with Fabrix."}
                 </h1>
 

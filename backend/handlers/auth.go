@@ -5,10 +5,11 @@ import (
 	"auth-app/utils"
 	"database/sql"
 	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strings"
+
 	"github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 /* LoginHandler handles the login process for existing users to
@@ -109,6 +110,37 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 	}
 
+}
+
+/**
+ * MeHandler handles requests to verify the current user's authentication status.
+ * @param db *sql.DB - The database connection
+ * @return http.HandlerFunc - The me handler function
+ */
+func MeHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		email := r.Context().Value("email").(string)
+
+		// Check if user exists, if not, return an error (handles case where user was deleted after token was issued)
+		var exists bool
+		err := db.QueryRow(
+			"SELECT EXISTS(SELECT 1 FROM users WHERE email=$1)",
+			email,
+		).Scan(&exists)
+
+		if err != nil || !exists {
+			utils.WriteJSONResponse(w, http.StatusUnauthorized, map[string]string{
+				"error": "User no longer exists",
+			})
+			return
+		}
+
+		utils.WriteJSONResponse(w, http.StatusOK, map[string]string{
+			"message": "Authenticated",
+			"email":   email,
+		})
+	}
 }
 
 /**
