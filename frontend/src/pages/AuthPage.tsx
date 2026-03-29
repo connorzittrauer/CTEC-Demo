@@ -36,13 +36,16 @@ function AuthPage() {
     const [mode, setMode] = useState<"login" | "signup">("login");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
+
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
         email: "",
         password: "",
     });
+
     const [errors, setErrors] = useState({
         login: { email: "", password: "" },
         signup: {
@@ -75,7 +78,7 @@ function AuthPage() {
 
     const handleModeChange = (newMode: "login" | "signup") => {
         setMode(newMode);
-
+        setSuccessMessage("");
         setForm({
             firstName: "",
             lastName: "",
@@ -153,6 +156,16 @@ function AuthPage() {
 
                 // After signup → switch to login
                 setMode("login");
+                setForm({
+                    firstName: "",
+                    lastName: "",
+                    email: form.email,   // keep email
+                    password: "",        // clear password
+                });
+
+                setSuccessMessage("Account created. Please log in.");
+
+
             }
 
         } catch (err: any) {
@@ -187,7 +200,7 @@ function AuthPage() {
                 {/* HEADER */}
                 <h1 className="text-2xl font-heading mb-6 text-text">
                     {mode === "login"
-                        ? "Login to your workspace"
+                        ? "Login to your workspace."
                         : "Sign up to start building with Fabrix."}
                 </h1>
 
@@ -239,6 +252,13 @@ function AuthPage() {
                 {error && (
                     <p className="text-red-500 text-sm mt-2 animate-fade-slide">
                         ⚠ {error}
+                    </p>
+                )}
+
+                {/* SUCCESS MESSAGE */}
+                {successMessage && (
+                    <p className="text-green-600 text-sm mt-2 animate-fade-slide">
+                        ✔ {successMessage}
                     </p>
                 )}
 
