@@ -37,7 +37,7 @@ function Dashboard() {
       {/* Toast Component */}
       <ToastAlert />
 
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col animate-page-in">
         {/* Header */}
         <header className="flex justify-between items-center p-6 bg-white/80 backdrop-blur border-b border-gray-200">
           <h1 className="text-2xl font-heading">Dashboard</h1>

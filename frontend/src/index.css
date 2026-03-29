@@ -7,6 +7,10 @@ body {
   @apply bg-background text-text font-body;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 .node-wave {
   fill: #7B7B7A;
   animation: wave linear infinite;
@@ -32,4 +36,17 @@ body {
     fill: #7b7a7a;
     filter: none;
   }
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-page-in {
+  animation: pageFadeIn 0.25s ease-out;
 }
