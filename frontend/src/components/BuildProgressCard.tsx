@@ -29,9 +29,15 @@ function BuildProgressCard() {
       w-[780px]
     ">
       {/* Header */}
-      <h2 className="font-heading text-lg mb-2">
-        Active Print Job
-      </h2>
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="font-heading text-lg">
+          Active Print Job
+        </h2>
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <span>Status:</span>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.6)]"></div>
+        </div>
+      </div>
 
       {/* Project Name */}
       <p className="text-sm text-gray-600">
