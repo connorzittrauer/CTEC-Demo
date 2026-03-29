@@ -28,10 +28,13 @@ The workflow at a high level:
 #### 1. Debugging
 I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. Below is a sample of the prompt I gave ChatGPT to assist with debugging:
 
-> "When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:
-> http://localhost:5173/dashboardsdfsdf
-> The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error:
-> App.tsx:32 Maximum update depth exceeded..."
+> *"When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:*
+> *http://localhost:5173/dashboardsdfsdf*
+> *The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error:*
+> *App.tsx:32 Maximum update depth exceeded..."*
+
+The bug resulted from faulty authentication pattern being used in `App.tsx`. I learned from this prompting session that it is bad practice to include
+route authentication login in `App.tsx`.
 
 1. Define Project Structure 
     - 1.1. Create project directories/subdirectories
