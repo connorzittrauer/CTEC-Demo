@@ -39,8 +39,11 @@ function Dashboard() {
 
       <div className="min-h-screen flex flex-col animate-page-in">
         {/* Header */}
-        <header className="flex justify-between items-center p-6 bg-white/80 backdrop-blur border-b border-gray-200">
-          <h1 className="text-2xl font-heading">Dashboard</h1>
+        <header className="flex justify-between items-center p-6 bg-secondary backdrop-blur  border-gray-200">
+          <div className="flex items-center gap-3">
+            <img src="/fabrix.svg" alt="Fabrix logo" className="w-8 h-8" />
+            <h1 className="text-2xl font-heading">Dashboard</h1>
+          </div>
           
           <div className="flex items-center gap-4">
             {email && (
