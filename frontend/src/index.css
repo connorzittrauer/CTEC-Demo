@@ -48,5 +48,5 @@ html, body {
 }
 
 .animate-page-in {
-  animation: pageFadeIn 0.25s ease-out;
+  animation: pageFadeIn .40s ease-out;
 }

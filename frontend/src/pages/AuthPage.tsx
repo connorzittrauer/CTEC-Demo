@@ -142,9 +142,13 @@ function AuthPage() {
                 const data = await login(form.email, form.password);
 
                 setToken(data.token);
-                navigate("/dashboard", {
-                    state: { toast: "login-success" },
-                });
+
+                // Small delay so spinner is visible + transition feels smooth
+                setTimeout(() => {
+                    navigate("/dashboard", {
+                        state: { toast: "login-success" },
+                    });
+                }, 200);
             } else {
                 await signup(
                     form.firstName,
