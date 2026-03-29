@@ -1,5 +1,12 @@
 # Defines the container for the PostgreSQL database
 services:
+  frontend:
+    build: ./frontend
+    container_name: auth-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
   backend:
     build: ./backend
     container_name: auth-backend

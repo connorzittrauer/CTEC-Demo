@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { isAuthenticated } from "../utils/auth";
 import { useState } from "react";
 import { login, signup } from "../api/auth";
 import { useNavigate } from "react-router-dom";

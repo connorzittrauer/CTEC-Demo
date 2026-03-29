@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { isAuthenticated } from "./utils/auth";
 
 function App() {
   return (

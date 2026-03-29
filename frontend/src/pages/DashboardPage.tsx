@@ -8,7 +8,6 @@ function Dashboard() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const handleLogout = () => {
     removeToken();
@@ -41,9 +40,7 @@ function Dashboard() {
         <h1 className="text-2xl font-heading">Dashboard</h1>
 
         {loading && <p className="text-text">Loading...</p>}
-        {error && (
-          <p className="text-red-500">⚠ {error}</p>
-        )}
+
         {email && (
           <p className="text-text">
             Logged in as: <span className="font-medium">{email}</span>
