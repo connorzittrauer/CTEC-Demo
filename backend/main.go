@@ -28,7 +28,7 @@ func main() {
 	mux.HandleFunc("/logout", handlers.LogoutHandler())
 
 	// Protected route to test JWT middleware
-	mux.HandleFunc("/protected", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/me", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 
 		email := r.Context().Value("email").(string)
 

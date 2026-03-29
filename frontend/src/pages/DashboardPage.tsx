@@ -24,7 +24,8 @@ function Dashboard() {
         const data = await getCurrentUser();
         setEmail(data.email);
       } catch (err: any) {
-        setError(err.message || "Failed to fetch");
+        removeToken();
+        navigate("/auth", { replace: true });
       } finally {
         setLoading(false);
       }

@@ -7,7 +7,7 @@
 import { apiFetch } from "./client";
 
 export async function getCurrentUser() {
-  return apiFetch("/protected", {
+  return apiFetch("/me", {
     method: "GET",
     auth: true,
   });
