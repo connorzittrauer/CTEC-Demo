@@ -134,24 +134,26 @@ function AuthPage() {
 
         setLoading(true);
         const start = Date.now();
-
+        // Switch to dashboard immediately on success, but keep the spinner for at least 300ms to prevent jank
         try {
-            const data =
-                mode === "login"
-                    ? await login(form.email, form.password)
-                    : await signup(
-                        form.firstName,
-                        form.lastName,
-                        form.email,
-                        form.password
-                    );
+            if (mode === "login") {
+                const data = await login(form.email, form.password);
 
-            setError("");
+                setToken(data.token);
+                navigate("/dashboard", {
+                    state: { toast: "login-success" },
+                });
+            } else {
+                await signup(
+                    form.firstName,
+                    form.lastName,
+                    form.email,
+                    form.password
+                );
 
-            setToken(data.token);
-            navigate("/dashboard", {
-                state: { toast: "login-success" },
-            });
+                // After signup → switch to login
+                setMode("login");
+            }
 
         } catch (err: any) {
             setError(err.message || "Something went wrong");

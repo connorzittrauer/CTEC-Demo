@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api/client";
 import ToastAlert from "../components/ToastAlert";
+import { getCurrentUser } from "../api/user";
+
+
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -18,11 +21,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchProtected = async () => {
       try {
-        const data = await apiFetch("/protected", {
-          method: "GET",
-          auth: true,
-        });
-
+        const data = await getCurrentUser();
         setEmail(data.email);
       } catch (err: any) {
         setError(err.message || "Failed to fetch");

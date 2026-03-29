@@ -39,6 +39,7 @@ export async function apiFetch(
             finalHeaders.set("Authorization", `Bearer ${token}`);
         }
     }
+
     const res = await fetch(`${BASE_URL}${endpoint}`, {
         ...rest,
         headers: finalHeaders,
