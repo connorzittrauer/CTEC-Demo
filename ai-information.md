@@ -1,3 +1,7 @@
+### AI-Tools Used
+1. ChatGPT (Primary)
+2. Copilot (Supplemental)
+
 ### ChatGPT (Browser)
 ChatGPT often suggested longer project files than I was comfortable with. 
 For example, in ```backend/handlers/auth.go``` where we handle our JSON logic for sending http requests
@@ -25,7 +29,15 @@ and pasting. This allowed me to audit each line, especially since I am new to go
 The workflow at a high level:
 
 ### Use Cases
-#### 1. Debugging
+
+#### 2. Copilot TailwingCSS Generation
+While I consulted ChatGPT for boileplate TailwindCSS, I also used copilot to quickly edit CSS to save time. 
+Example prompt:
+> *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
+
+Which yielded quick results. 
+
+#### 3. Debugging
 I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. Below is a sample of the prompt I gave ChatGPT to assist with debugging:
 
 > *"When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:*
