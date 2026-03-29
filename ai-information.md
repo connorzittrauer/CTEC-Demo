@@ -20,34 +20,13 @@ vscode ai-generated tab completion and audit heavily in my workflows.
       I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
         - I would highlight the snippet and prompt at fix
 
-### Workflow 
+## Workflow 
 I instructed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project. 
 Instead of offering every solution at once, we implemented each feature one at a time. ChatGPT would offer the generated 
 scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying
 and pasting. This allowed me to audit each line, especially since I am new to golang. 
 
 The workflow at a high level:
-
-### Use Cases
-
-#### 2. Copilot TailwingCSS Generation
-While I consulted ChatGPT for boileplate TailwindCSS, I also used copilot to quickly edit CSS to save time. 
-Example prompt:
-> *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
-
-Which yielded quick results. 
-
-#### 3. Debugging
-I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. Below is a sample of the prompt I gave ChatGPT to assist with debugging:
-
-> *"When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:*
-> *http://localhost:5173/dashboardsdfsdf*
-> *The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error:*
-> *App.tsx:32 Maximum update depth exceeded..."*
-
-The bug resulted from faulty authentication pattern being used in `App.tsx`. I learned from this prompting session that it is bad practice to include
-route authentication login in `App.tsx`.
-
 1. Define Project Structure 
     - 1.1. Create project directories/subdirectories
         - /backend, /frontend, /db/... 
@@ -62,6 +41,36 @@ route authentication login in `App.tsx`.
     - 2.3 Middleware logic
     - 2.4 Handler & Middleware Testing
 
+
+
+## Use Cases
+
+### 2. Copilot TailwingCSS Generation
+While I consulted ChatGPT for boileplate TailwindCSS, I also used copilot to quickly edit CSS to save time. 
+Example prompt:
+> *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
+
+Which yielded quick results. 
+
+### 3. AI-Assisted Debugging
+**3.1 Faulty Authentication Pattern**     
+I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. Below is a sample of the prompt I gave ChatGPT to assist with debugging:
+
+> *"When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:*
+> *http://localhost:5173/dashboardsdfsdf*
+> *The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error:*
+> *App.tsx:32 Maximum update depth exceeded..."*
+
+The bug resulted from faulty authentication pattern being used in `App.tsx`. I *learned* from this prompting session that it is bad practice to include route authentication login within `App.tsx`.
+
+**3.2 Client-side Routing Flaw**  
+I used ChatGPT again while testing edge cases related to routing and authentication. While intentionally trying to break the application, I encountered an inconsistency in route protection. Below is a sample of the prompt I gave ChatGPT:
+
+> *"When the user logs out and is redirected to `/auth`, everything works correctly. HOWEVER, if the user then enters a random route like:*
+> *http://localhost:5173/dashboard_blahblah*
+> *they are redirected to `/auth`, but can then manually navigate back to `/dashboard` and gain access without logging in again."*
+
+The bug resulted from an incomplete client-side routing pattern. While I had implemented a `ProtectedRoute` to guard authenticated routes, I had not implemented the inverse logic for public routes. I resolved this by introducing a `PublicRoute` component to implement **symmetric route protection** in my app.
 
 
 ## Using ChatGPT to learn GO
