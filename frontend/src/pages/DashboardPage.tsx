@@ -6,7 +6,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     removeToken();
-    navigate("/");
+    navigate("/auth", { replace: true });
   };
 
   return (

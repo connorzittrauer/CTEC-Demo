@@ -7,16 +7,9 @@ import { isAuthenticated } from "./utils/auth";
 function App() {
   return (
     <Routes>
-      
+
       {/* Auth route */}
-      <Route
-        path="/auth"
-        element={
-          isAuthenticated()
-            ? <Navigate to="/dashboard" replace />
-            : <AuthPage />
-        }
-      />
+      <Route path="/auth" element={<AuthPage />} />
 
       {/* Protected route */}
       <Route

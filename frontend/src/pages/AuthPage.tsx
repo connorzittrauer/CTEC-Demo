@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { useEffect } from "react";
 import { isAuthenticated } from "../utils/auth";
+import { useState } from "react";
 import { login, signup } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { setToken } from "../utils/auth";
@@ -9,9 +9,9 @@ import AuthLayout from "../layouts/AuthLayout";
 
 
 import {
-  validateEmail,
-  validatePassword,
-  validateName,
+    validateEmail,
+    validatePassword,
+    validateName,
 } from "../utils/validation";
 
 /**
@@ -32,232 +32,231 @@ import {
  * - UI remains declarative and readable
  */
 function AuthPage() {
-  // ------------------------
-  // STATE
-  // ------------------------
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated()) {
-      navigate("/dashboard");
-    }
-  }, []);
-
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({
-    login: { email: "", password: "" },
-    signup: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
-  });
-
-  // ------------------------
-  // DERIVED STATE
-  // ------------------------
-  const currentErrors = errors[mode];
-
-  const isFormValid =
-    Object.values(currentErrors).every((e) => e === "") &&
-    (mode === "login"
-      ? form.email && form.password
-      : form.firstName &&
-        form.lastName &&
-        form.email &&
-        form.password);
-
-  // ------------------------
-  // HANDLERS
-  // ------------------------
-
-  const handleModeChange = (newMode: "login" | "signup") => {
-    setMode(newMode);
-
-    setForm({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+    // ------------------------
+    // STATE
+    // ------------------------
+    const [mode, setMode] = useState<"login" | "signup">("login");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const [form, setForm] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+    });
+    const [errors, setErrors] = useState({
+        login: { email: "", password: "" },
+        signup: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        },
     });
 
-    setErrors((prev) => ({
-      ...prev,
-      [newMode]:
-        newMode === "login"
-          ? { email: "", password: "" }
-          : {
-              firstName: "",
-              lastName: "",
-              email: "",
-              password: "",
+    // If the user is authetnicated, redirect to dashboard
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate("/dashboard", { replace: true });
+        }
+    }, [navigate]);
+
+    // ------------------------
+    // DERIVED STATE
+    // ------------------------
+    const currentErrors = errors[mode];
+
+    const isFormValid =
+        Object.values(currentErrors).every((e) => e === "") &&
+        (mode === "login"
+            ? form.email && form.password
+            : form.firstName &&
+            form.lastName &&
+            form.email &&
+            form.password);
+
+    // ------------------------
+    // HANDLERS
+    // ------------------------
+
+    const handleModeChange = (newMode: "login" | "signup") => {
+        setMode(newMode);
+
+        setForm({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        });
+
+        setErrors((prev) => ({
+            ...prev,
+            [newMode]:
+                newMode === "login"
+                    ? { email: "", password: "" }
+                    : {
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        password: "",
+                    },
+        }));
+
+        setError("");
+    };
+
+    const handleChange = (
+        field: keyof typeof form,
+        value: string
+    ) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        let error = "";
+
+        if (field === "email") error = validateEmail(value);
+        if (field === "password") error = validatePassword(value);
+
+        if (mode === "signup") {
+            if (field === "firstName")
+                error = validateName(value, "First name");
+            if (field === "lastName")
+                error = validateName(value, "Last name");
+        }
+
+        setErrors((prev) => ({
+            ...prev,
+            [mode]: {
+                ...prev[mode],
+                [field]: error,
             },
-    }));
+        }));
+    };
 
-    setError("");
-  };
+    const handleSubmit = async () => {
+        if (!isFormValid) return;
 
-  const handleChange = (
-    field: keyof typeof form,
-    value: string
-  ) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+        setLoading(true);
+        const start = Date.now();
 
-    let error = "";
+        try {
+            const data =
+                mode === "login"
+                    ? await login(form.email, form.password)
+                    : await signup(
+                        form.firstName,
+                        form.lastName,
+                        form.email,
+                        form.password
+                    );
 
-    if (field === "email") error = validateEmail(value);
-    if (field === "password") error = validatePassword(value);
+            setError("");
 
-    if (mode === "signup") {
-      if (field === "firstName")
-        error = validateName(value, "First name");
-      if (field === "lastName")
-        error = validateName(value, "Last name");
-    }
+            setToken(data.token);
+            navigate("/dashboard");
 
-    setErrors((prev) => ({
-      ...prev,
-      [mode]: {
-        ...prev[mode],
-        [field]: error,
-      },
-    }));
-  };
+        } catch (err: any) {
+            setError(err.message || "Something went wrong");
+        } finally {
+            const elapsed = Date.now() - start;
+            const minDuration = 300;
 
-  const handleSubmit = async () => {
-    if (!isFormValid) return;
+            if (elapsed < minDuration) {
+                setTimeout(() => setLoading(false), minDuration - elapsed);
+            } else {
+                setLoading(false);
+            }
+        }
+    };
 
-    setLoading(true);
-    const start = Date.now();
+    // ------------------------
+    // RENDER
+    // ------------------------
 
-    try {
-      const data =
-        mode === "login"
-          ? await login(form.email, form.password)
-          : await signup(
-              form.firstName,
-              form.lastName,
-              form.email,
-              form.password
-            );
-
-      setError("");
-      
-      setToken(data.token);
-      navigate("/dashboard");
-
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      const elapsed = Date.now() - start;
-      const minDuration = 300;
-
-      if (elapsed < minDuration) {
-        setTimeout(() => setLoading(false), minDuration - elapsed);
-      } else {
-        setLoading(false);
-      }
-    }
-  };
-
-  // ------------------------
-  // RENDER
-  // ------------------------
-
-  return (
-    <AuthLayout mode={mode} setMode={handleModeChange}>
-      <div
-        key={mode}
-        className="
+    return (
+        <AuthLayout mode={mode} setMode={handleModeChange}>
+            <div
+                key={mode}
+                className="
           transition-all
           duration-300
           ease-in-out
           animate-fade-slide
         "
-      >
-        {/* HEADER */}
-        <h1 className="text-2xl font-heading mb-6 text-text">
-          {mode === "login"
-            ? "Login with e-mail and password"
-            : "Sign up to start building with Fabrix."}
-        </h1>
+            >
+                {/* HEADER */}
+                <h1 className="text-2xl font-heading mb-6 text-text">
+                    {mode === "login"
+                        ? "Login with e-mail and password"
+                        : "Sign up to start building with Fabrix."}
+                </h1>
 
-        {/* FORM */}
-        <div className="space-y-4">
-          {mode === "signup" && (
-            <>
-              <Input
-                label="First name"
-                value={form.firstName}
-                onChange={(e) =>
-                  handleChange("firstName", e.target.value)
-                }
-                error={errors.signup.firstName}
-              />
-              <Input
-                label="Last name"
-                value={form.lastName}
-                onChange={(e) =>
-                  handleChange("lastName", e.target.value)
-                }
-                error={errors.signup.lastName}
-              />
-            </>
-          )}
+                {/* FORM */}
+                <div className="space-y-4">
+                    {mode === "signup" && (
+                        <>
+                            <Input
+                                label="First name"
+                                value={form.firstName}
+                                onChange={(e) =>
+                                    handleChange("firstName", e.target.value)
+                                }
+                                error={errors.signup.firstName}
+                            />
+                            <Input
+                                label="Last name"
+                                value={form.lastName}
+                                onChange={(e) =>
+                                    handleChange("lastName", e.target.value)
+                                }
+                                error={errors.signup.lastName}
+                            />
+                        </>
+                    )}
 
-          <Input
-            label="Email"
-            type="email"
-            value={form.email}
-            onChange={(e) =>
-              handleChange("email", e.target.value)
-            }
-            error={currentErrors.email}
-          />
+                    <Input
+                        label="Email"
+                        type="email"
+                        value={form.email}
+                        onChange={(e) =>
+                            handleChange("email", e.target.value)
+                        }
+                        error={currentErrors.email}
+                    />
 
-          <Input
-            label="Password"
-            type="password"
-            value={form.password}
-            onChange={(e) =>
-              handleChange("password", e.target.value)
-            }
-            error={currentErrors.password}
-          />
-        </div>
+                    <Input
+                        label="Password"
+                        type="password"
+                        value={form.password}
+                        onChange={(e) =>
+                            handleChange("password", e.target.value)
+                        }
+                        error={currentErrors.password}
+                    />
+                </div>
 
-        {/* GLOBAL ERROR */}
-        {error && (
-          <p className="text-red-500 text-sm mt-2 animate-fade-slide">
-            ⚠ {error}
-          </p>
-        )}
+                {/* GLOBAL ERROR */}
+                {error && (
+                    <p className="text-red-500 text-sm mt-2 animate-fade-slide">
+                        ⚠ {error}
+                    </p>
+                )}
 
-        {/* SUBMIT */}
-        <div
-          className={`
+                {/* SUBMIT */}
+                <div
+                    className={`
             mt-2
             transition-all duration-300 ease-in-out
             ${error && !loading ? "translate-y-2" : "translate-y-0"}
           `}
-        >
-          <button
-            onClick={handleSubmit}
-            disabled={loading || !isFormValid}
-            className="
+                >
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading || !isFormValid}
+                        className="
               w-full py-2
               bg-accent text-white
               rounded-md shadow-sm
@@ -265,19 +264,19 @@ function AuthPage() {
               disabled:opacity-50 disabled:cursor-not-allowed
               flex items-center justify-center
             "
-          >
-            {loading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : mode === "login" ? (
-              "Login"
-            ) : (
-              "Create Account"
-            )}
-          </button>
-        </div>
-      </div>
-    </AuthLayout>
-  );
+                    >
+                        {loading ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : mode === "login" ? (
+                            "Login"
+                        ) : (
+                            "Create Account"
+                        )}
+                    </button>
+                </div>
+            </div>
+        </AuthLayout>
+    );
 }
 
 export default AuthPage;
