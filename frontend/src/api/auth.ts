@@ -16,8 +16,9 @@ export async function login(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) {
-    throw new Error("Invalid credentials");
+  if (!res.ok) {  
+    const err= await res.json();
+    throw new Error(err.error);
   }
 
   return res.json(); // expected: { token: "..." }
@@ -44,7 +45,7 @@ export async function signup(
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || "Signup failed");
+    throw new Error(err.error);
   }
 
   return res.json();
