@@ -45,8 +45,8 @@ The workflow at a high level:
 
 ## Use Cases
 
-### 2. Copilot TailwingCSS Generation
-While I consulted ChatGPT for boileplate TailwindCSS, I also used copilot to quickly edit CSS to save time. 
+### 2. Rapid TailwingCSS Stlying
+While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time. 
 Example prompt:
 > *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
 
@@ -74,7 +74,7 @@ The bug resulted from an incomplete client-side routing pattern. While I had imp
 
 
 ## Using ChatGPT to learn GO
-While I do have solid fundamentals in full stack web design, at the outset of the project, I prompted
+I do have solid fundamentals in full stack web design, at the outset of the project, I prompted
 ChatGPT to explain each script it that it offered during the desing process. Here are some important 
 Golang concepts I learned while building out the backend:
 - Middleware Logic
