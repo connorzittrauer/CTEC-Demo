@@ -114,7 +114,7 @@ function AuthPage() {
         let error = "";
 
         if (field === "email") error = validateEmail(value);
-        if (field === "password") error = validatePassword(value);
+        if (field === "password") error = validatePassword(value, mode === "signup");
 
         if (mode === "signup") {
             if (field === "firstName")
