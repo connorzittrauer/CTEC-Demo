@@ -37,6 +37,7 @@ function AuthPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -239,12 +240,14 @@ function AuthPage() {
 
                     <Input
                         label="Password"
-                        type="password"
                         value={form.password}
                         onChange={(e) =>
                             handleChange("password", e.target.value)
                         }
                         error={currentErrors.password}
+                        isPassword={true}
+                        showPassword={showPassword}
+                        onTogglePassword={() => setShowPassword(!showPassword)}
                     />
                 </div>
 
