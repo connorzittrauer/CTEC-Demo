@@ -23,34 +23,36 @@ function ToastAlert() {
 
   // Persistent state (fixes your bug)
   const [toastType, setToastType] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false); // ✅ this was already needed
+  const [showToast, setShowToast] = useState(false); 
 
   useEffect(() => {
     if (!incomingToast) return;
 
-    // Persist the value and start the auto-dismiss timer. We intentionally
-    // clear the navigation state only after the timer fires so that the
-    // effect's cleanup (which runs when location.state changes) does not
-    // cancel the timer prematurely.
+    // Persist the value and delay the appearance so it matches other page animations.
     setToastType(incomingToast);
-    setShowToast(true);
 
-    const timer = setTimeout(() => {
+    const showTimer = window.setTimeout(() => {
+      setShowToast(true);
+    }, 150);
+
+    const hideTimer = window.setTimeout(() => {
       setShowToast(false);
       setToastType(null); // cleanup
       // Clear navigation state after the toast has been dismissed
       navigate(".", { replace: true, state: {} });
-    }, 2500);
+    }, 2900);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, [incomingToast, navigate]);
 
   if (!showToast) return null;
-
   return (
-    <div
-      className="
-        fixed top-6 right-6
+    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
+      <div
+        className="
         bg-green-200
         border border-border
         text-text
@@ -58,10 +60,12 @@ function ToastAlert() {
         rounded-md
         shadow-md
         text-base
-        animate-fade-slide
+        animate-page-in
       "
-    >
-      {toastType === "login-success" && "✔ Logged in successfully"}
+      >
+        {toastType === "login-success" && "✔ Logged in successfully"}
+        {toastType === "signup-success" && "✔ Signup successful. Please log in."}
+      </div>
     </div>
   );
 }
