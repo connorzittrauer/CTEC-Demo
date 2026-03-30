@@ -19,9 +19,7 @@ services:
 
   db:
     image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: authdb
+    env_file:
+      - ./backend/.env
     volumes:
       - ./db/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql

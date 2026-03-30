@@ -27,10 +27,8 @@ services:
     image: postgres:15
     container_name: auth-db-dev
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: authdb
+    env_file:
+      - ./backend/.env
     ports:
       - "5433:5432"
     volumes:

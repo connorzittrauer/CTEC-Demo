@@ -19,7 +19,7 @@ func TestSignupHandler(test *testing.T) {
 	email := fmt.Sprintf("test_%d@citytelecoin.com", time.Now().UnixNano())
 
 	body := []byte(fmt.Sprintf(
-		`{"firstName":"Test","lastName":"User","email":"%s","password":"root"}`,
+		`{"first_name":"Test","last_name":"User","email":"%s","password":"SecurePass1"}`,
 		email,
 	))
 
@@ -48,7 +48,7 @@ func TestLoginHandler(test *testing.T) {
 
 	// Create a test user in the database
 	signupBody := []byte(fmt.Sprintf(
-		`{"firstName":"Test","lastName":"User","email":"%s","password":"root"}`,
+		`{"first_name":"Test","last_name":"User","email":"%s","password":"SecurePass1"}`,
 		email,
 	))
 	signupRequest, _ := http.NewRequest("POST", "/signup", bytes.NewBuffer(signupBody))
@@ -57,7 +57,7 @@ func TestLoginHandler(test *testing.T) {
 
 	// Attempt to login with the test user credentials
 	loginBody := []byte(fmt.Sprintf(
-		`{"email":"%s","password":"root"}`,
+		`{"email":"%s","password":"SecurePass1"}`,
 		email,
 	))
 	loginRequest, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(loginBody))

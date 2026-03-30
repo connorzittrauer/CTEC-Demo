@@ -1,19 +1,18 @@
-/**
- * This module initializes the database connection and
- * logs any relevant PSQL connectivity issues.
- */
-
+// Package db contains database initialization and connectivity helpers.
 package db
 
 import (
+	"auth-app/config"
 	"database/sql"
 	"log"
-	"time" 
+	"time"
+
 	_ "github.com/lib/pq"
 )
 
+// InitializeDatabase opens the Postgres connection and waits for readiness.
 func InitializeDatabase() *sql.DB {
-	connectionString := "postgres://postgres:password@db:5432/authdb?sslmode=disable"
+	connectionString := config.DatabaseURL()
 
 	db, error := sql.Open("postgres", connectionString)
 	if error != nil {

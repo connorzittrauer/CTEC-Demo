@@ -30,6 +30,7 @@ This project supports both development and production environments via Docker Co
 ### Development
 - Hot reloading (Vite, Go Air)
 - Local volume mounts
+- Shared runtime configuration via `backend/.env`
 
 ```bash
 docker compose -f docker-compose.dev.yml up --build
@@ -42,6 +43,7 @@ Backend: http://localhost:8080
 - Optimized builds
 - No volume mounts
 - Static frontend served via `serve`
+- Shared runtime configuration via `backend/.env`
 
 ```bash
 docker compose up --build
@@ -105,6 +107,18 @@ go install github.com/cosmtrek/air@latest
 ### JWT Configuration
 The backend reads the JWT secret from `backend/.env` at runtime.
 JWT signing and validation are both handled server-side using `HS256`.
+
+### Runtime Configuration
+The backend and database read their runtime settings from `backend/.env`.
+
+Current variables used by the project:
+
+- `JWT_SECRET`
+- `DATABASE_URL`
+- `CORS_ALLOWED_ORIGIN`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `POSTGRES_DB`
 
 
 
@@ -265,7 +279,7 @@ Since we are using Docker, we need to run the tests in a containerized environme
 first to stop and remove all currently running containers (this avoids 'connection refused' errors): 
 ```bash
 docker compose down
-docker compose run --rm backend go test -v ./...
+docker compose run --build --rm backend go test -v ./...
 ```
 If the tests are successful, you should see something similiar this in your terminal logs:
 ```bash
