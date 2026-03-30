@@ -61,9 +61,9 @@ Final UX/UI Polish
 Additionally:
 - ChatGPT would offer the generated scripts for the project and a detailed explanation of what each code block was doing. 
   - For the purposes of this project, I wrote most of the **Go** code by hand instead of copying and pasting. 
-   - I wanted to get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better understanding of the Go syntax/language. 
- - As my comfort with Go increased, I became more keen to accept
-  VSCode AI-generated tab completion and audit heavily in my workflows. 
+  - I wanted to get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better understanding of the Go syntax/language. 
+- As my comfort with Go increased, I became more keen to accept
+  VSCode AI-generated tab completion and audit it heavily in my workflows. 
 
 #### **II. Learning Go**    
 Whenever ChatGPT generated a script, I instructed it that I had a full-stack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. I have solid fundamentals in full-stack web design. I explained this to ChatGPT and prompted it to explain each script that it offered during the design process. 
@@ -72,11 +72,11 @@ Here are some important Go concepts I learned while building out the backend:
 - "***What's Convention in Go?"***
     - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, I structured my project to adhere to D.R.Y. (don't repeat yourself) and Single Responsibility design practices, such that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly handled session tokens, etc.
 - **JWT Session Handling**
-    - JWT session handling is a bit new to me. I had never implemented it from scratch. So, I carefully read the generated code in ```jwt.go``` 
+    - JWT session handling is a bit new to me. I had never implemented it from scratch, so I carefully read the generated code in ```jwt.go```. 
 - **Syntax Explanation**
     - I carefully read the generated code and typed it mostly by hand, to learn it better. 
-    - I learned that return types in Go occur *after* the parameter definition
-    - Type declaration occurs *after* variable declaration, this was new to me!
+    - I learned that return types in Go occur *after* the parameter definition.
+    - Type declaration occurs *after* variable declaration, which was new to me!
 
   
 #### III. **AI-Assisted Debugging**
@@ -98,6 +98,7 @@ I used ChatGPT again while testing edge cases related to routing and authenticat
 > *they are redirected to `/auth`, but can then manually navigate back to `/dashboard` and gain access without logging in again."*
 
 The bug resulted from an incomplete client-side routing pattern. While I had implemented a `ProtectedRoute` to guard authenticated routes, I had not implemented the inverse logic for public routes. I resolved this by introducing a `PublicRoute` component to implement **symmetric route protection** in my app.
+
 ## Copilot Workflow 
 **I. Debugging Tailwind**
 - I do a lot of my CSS debugging in the browser console and sometimes in the code, but 
@@ -109,13 +110,13 @@ The bug resulted from an incomplete client-side routing pattern. While I had imp
 
 Sample prompt:
 ```markdown
-I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons.  
+I want to add one of those icons in my password field that you can click to view the password. One of the eye icons.  
 ```
-Copilot is a useful tool for quickly resolving one-off issues. But, fails for larger audits of project. 
+Copilot is a useful tool for quickly resolving one-off issues, but it fails for larger audits of a project. 
 
 ## Codex Workflow
 ### I. Security Issues
-After every feature from the requirements had been satisfied, I wanted to interace with a LLM locally to perform an audit of my entire codebase. I wanted to audit the codebase for three purposes, in order of importance:
+After every feature from the requirements had been satisfied, I wanted to interact with an LLM locally to perform an audit of my entire codebase. I wanted to audit the codebase for three purposes, in order of importance:
 
 1. Security Issues
 2. Bugs
@@ -123,9 +124,9 @@ After every feature from the requirements had been satisfied, I wanted to intera
 
 Here is a sample of the prompt after I had codex analyze my codebase:
 ```markdown
-I am finishing up this project for work. Everything works correctly. However, I really want to clean up my codebase where possible. There is some slop-code at certain points. I want to refactor where possible while adhering closely to the convetions of the lanuguage. I also want to check for glaring security issue. I want you to analyze the code base and assign high, medium, and low priorites to what you think needs to be adjusted. 
+I am finishing up this project for work. Everything works correctly. However, I really want to clean up my codebase where possible. There is some slop-code at certain points. I want to refactor where possible while adhering closely to the conventions of the language. I also want to check for glaring security issues. I want you to analyze the codebase and assign high, medium, and low priorities to what you think needs to be adjusted. 
 ```
-Codex identified around four high risk issues with my codebase. One high vulnerability security error I am embarassed I did not catch was a set of - **hardcoded DB credentials** in my Docker compose file. We moved the credentials into the `.env` file:
+Codex identified around four high-risk issues with my codebase. One high-vulnerability security error I am embarrassed I did not catch was a set of **hardcoded DB credentials** in my Docker Compose file. We moved the credentials into the `.env` file:
 
 ```yaml
   db:
@@ -137,10 +138,10 @@ Codex identified around four high risk issues with my codebase. One high vulnera
       POSTGRES_DB: authdb
 ```
 ### II. Bugs
-The backend was accepting malformed or extra JSON fields more loosely than it should have been, so we introduced `request.go`
+The backend was accepting malformed or extra JSON fields more loosely than it should have been, so we introduced `request.go`.
 
 ### Refactors
-As part of the front end cleanpup, codex ran `npm lint` as enforce styling standards and act as a quality gate check. Also, some of the frontend code was ***modularized for readability/maintanability***. The `auth.ts` file was making raw `fetch` calls fdirectly. Codex suggested adding a wrapper in `client.ts`
+As part of the front-end cleanup, Codex ran `npm lint` to enforce styling standards and act as a quality gate check. Also, some of the frontend code was ***modularized for readability/maintainability***. The `auth.ts` file was making raw `fetch` calls directly. Codex suggested adding a wrapper in `client.ts`.
 
 Before codex refactor:
 ```js
@@ -161,19 +162,19 @@ export async function login(email: string, password: string) {
   });
 }
 ```
-This example demonstrtes Codex's ability to enhance readability and maintainability. 
+This example demonstrates Codex's ability to enhance readability and maintainability. 
 
 ## ⚠️ AI-Generated Code Shortfalls 
 ### 1. Lack of Abstraction
-While AI quickly generated scripts for me, it often fell short in modularizing code and abstraction. ChatGPT often suggested longer project files than I was comfortable with. It's important 
+While AI quickly generated scripts for me, it often fell short in modularizing code and abstraction. ChatGPT often suggested longer project files than I was comfortable with. 
 
 For example, in `backend/handlers/auth.go` where we handle our JSON logic for sending http requests
 to our handlers, ChatGPT generated scripts included logic for JWT session token generation as well
 as JSON response handling. I felt it was important to abstract these duties out to separate utility modules,
-```jwt.go``` and ```response.go```, respectively at adhere as closely as possible to the design principle of *single responsibility*
+```jwt.go``` and ```response.go```, respectively, to adhere as closely as possible to the design principle of *single responsibility*.
 
 ### 2. Errors 
-While errors like this is are relatively rare, ChatGPT suggested code sometimes failed to fully implement the requirements. When auditing the  generated React code at the end of the, I noticed my `DashboardPage` logout button was not actually  calling my /logout endpoint. 
+While errors like this are relatively rare, ChatGPT-suggested code sometimes failed to fully implement the requirements. When auditing the generated React code at the end, I noticed my `DashboardPage` logout button was not actually calling my `/logout` endpoint. 
 
 ```js
 const handleLogout = () => {
@@ -191,7 +192,7 @@ export async function login(email: string, password: string) {
 export async function signup(
   return apiFetch("/signup", 
 
-// Missing /logout function defintion to backend  
+// Missing /logout function definition to backend  
 ```
 
 The function had never been defined. While the `/logout` handler in our code is mainly symbolic, this could have introduced bugs and errors later if the project scope broadened and we enhanced `/logout` functionality in the backend.
