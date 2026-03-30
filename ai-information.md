@@ -18,32 +18,7 @@
 ### Use Cases 
 #### **I. Project Guidance**
   - I started with the **/backend** of the application, I fed ChatGPT the project requiremnts and instructed it to walkthrough each step of the entire design process after submitting the requirements for the project.  I specifically instructure to not offer every solution at once. Instead, we implemented each feature one at a time. 
-  
-  - ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying and pasting. 
-  
-  - Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
-  get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
-  understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
-  vscode ai-generated tab completion and audit heavily in my workflows. 
-
-**Inital prompt:** 
-```markdown
-I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up,  carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicity instruct you to move to the next step."
-```
-This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
-
-#### **II. AI-Assisted Debugging**    
-**Faulty Authentication Pattern**     
-- I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. 
-- Below is a sample of the prompt I gave ChatGPT to assist with debugging.
-  
-Sample prompt:
-```markdown
-When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:
-http://localhost:5173/dashboard-asdf The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error: App.tsx:32 Maximum update depth exceeded... What does this error mean?"
-```
-The bug resulted from faulty authentication pattern being used in `App.tsx`. I *learned* from this prompting session that it is bad practice to include route authentication login within `App.tsx` in React.
-
+  - 
 The **prompt loop** for the project looked like this at a high level:     
 
 ### Prompt Loop
@@ -76,29 +51,64 @@ Dockerize
     ↓
 Final UX/UI Polish
 ``` 
+Additionally:
+  - ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the **Go** code by hand, instead of copying and pasting. 
+  
+  - Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
+  get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
+  understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
+  vscode ai-generated tab completion and audit heavily in my workflows. 
+
+**Inital prompt:** 
+```markdown
+I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up,  carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicity instruct you to move to the next step."
+```
+This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
+
+#### **II. Learning Go**    
+
+
+Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. I have solid fundamentals in full stack web design. I explain this to ChatGPT and prompted it to explain each script it that it offered during the desing process. 
+
+Here are some important Go concepts I learned while building out the backend:
+- "***What's Convention in Go?"***
+    - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, I structured my project as to adhere to D.R.Y (don't repeat yourself) and Single Responsibilty design practices. Such that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly handled session token, etc.
+- **JWT Session Handling**
+    - JWT session handling is a bit new to me. I had never implemented it from scratch. So, I carefully read the generated code in ```jwt.go``` 
+- **Syntax Explanation**
+    - I carefully audited the generated code and typed it mostly by hand, to learn it better. 
+    - I learned that return types in Go occur *after* the parameter definition
+    - Type declaration occurs *after* variable declaration, this was new to me!
+
+  
+#### **III. AI-Assisted Debugging**    
+*Faulty Authentication Pattern:*
+- I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. 
+- Below is a sample of the prompt I gave ChatGPT to assist with debugging.
+  
+Sample prompt:
+```markdown
+When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:
+http://localhost:5173/dashboard-asdf The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error: App.tsx:32 Maximum update depth exceeded... What does this error mean?"
+```
+The bug resulted from faulty authentication pattern being used in `App.tsx`. I *learned* from this prompting session that it is bad practice to include route authentication login within `App.tsx` in React.
 
 ## Copilot Workflow 
-- **Debugging Tailwind**
-    - I do most of my CSS debugging in the browswer console or by hand in the code, but 
-      I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
-        - I would highlight the snippet and prompt at fix
-- Quickly
-- **Rapid TailwingCSS Styling**
-    - While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time.  
+**I. Debugging Tailwind**
+- I do most of my CSS debugging in the browswer console or by hand in the code, but 
+  I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
+- I would highlight the snippet and prompt at fix
+  
+**II. Rapid TailwingCSS Styling**
+  - While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time.  
 
-
-
+Sample prompt:
+```markdown
+I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons.  
+```
 
 ## Ollama Workflow
-
-
-
-## Use Cases
-
-
-
-Example prompt:
-> *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
+____to be continued____
 
 Which yielded quick results. 
 
@@ -123,29 +133,9 @@ I used ChatGPT again while testing edge cases related to routing and authenticat
 The bug resulted from an incomplete client-side routing pattern. While I had implemented a `ProtectedRoute` to guard authenticated routes, I had not implemented the inverse logic for public routes. I resolved this by introducing a `PublicRoute` component to implement **symmetric route protection** in my app.
 
 
-## Using ChatGPT to learn GO
-I do have solid fundamentals in full stack web design, at the outset of the project, I prompted
-ChatGPT to explain each script it that it offered during the desing process. Here are some important 
-Golang concepts I learned while building out the backend:
-- Middleware Logic
-    - 
-- JWT Session Handling
-    - JWT session handling is a bit new to me. I had never implemented it from scratch. So I carefully read the generated code 
-     in ```jwt.go``` 
-- Syntax Explanation
-    - I carefully audited the generated code and typed it mostly by hand, to learn it better. 
-    I learned that return types in Go occur *after* the parameter definition
-    - Type declaration occurs *after* variable declaration, this was new to me!
-- Convention 
-    - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, 
-      I structured my project as to adhere to D.R.Y (don't repeat yourself) and Single Responsibilty design practices. Such 
-      that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly h
 
-## Learning Go
 ### Explanatory Code Snippets
-Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. 
-At the outset, ``backend/handlers/auth.go```
-I wanted to have a solid understanding of what  
+
 
 ## ⚠️ AI-Generated Code Shortfalls 
 ### 1. Abstraction
