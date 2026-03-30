@@ -2,6 +2,7 @@ import { removeToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../api/user";
+import { logout } from "../api/auth";
 import ToastAlert from "../components/ToastAlert";
 import BuildProgressCard from "../components/BuildProgressCard";
 
@@ -13,9 +14,13 @@ function Dashboard() {
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const handleLogout = () => {
-    removeToken();
-    navigate("/auth", { replace: true });
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      removeToken();
+      navigate("/auth", { replace: true });
+    }
   };
 
   useEffect(() => {

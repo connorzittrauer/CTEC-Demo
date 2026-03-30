@@ -172,7 +172,7 @@ Behavior:
 
 ### `POST /logout`
 
-Returns a success response for the client logout flow. Since authentication is stateless, logout is handled on the client by removing the token.
+Returns a success response for the client logout flow. The frontend calls this endpoint and then removes the stored token locally.
 
 ## cURL Examples
 

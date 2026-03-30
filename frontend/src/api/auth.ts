@@ -1,5 +1,5 @@
 /**
- * Auth API helpers for signup and login requests.
+ * Auth API helpers for signup, login, and logout requests.
  */
 
 import { apiFetch } from "./client";
@@ -25,5 +25,11 @@ export async function signup(
       email,
       password,
     }),
+  });
+}
+
+export async function logout() {
+  return apiFetch("/logout", {
+    method: "POST",
   });
 }
