@@ -15,35 +15,67 @@
 - ***Local Install*** 
 
 ## ChatGPT Workflow
-### Use Cases: 
-- **Project Guidance**
-    - At the beginning of the project, I fed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project.  Instead of offering every solution at once, we implemented each feature one at a time. ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying and pasting. 
+### Use Cases 
+#### **I. Project Guidance**
+  - I started with the **/backend** of the application, I fed ChatGPT the project requiremnts and instructed it to walkthrough each step of the entire design process after submitting the requirements for the project.  I specifically instructure to not offer every solution at once. Instead, we implemented each feature one at a time. 
+  
+  - ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying and pasting. 
+  
+  - Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
+  get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
+  understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
+  vscode ai-generated tab completion and audit heavily in my workflows. 
 
-This allowed me to audit each line, especially since I am new to golang. 
+**Inital prompt:** 
+```markdown
+I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up,  carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicity instruct you to move to the next step."
+```
+This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
 
-- Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
-get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
-understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
-vscode ai-generated tab completion and audit heavily in my workflows. 
+#### **II. AI-Assisted Debugging**    
+**Faulty Authentication Pattern**     
+- I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. 
+- Below is a sample of the prompt I gave ChatGPT to assist with debugging.
+  
+Sample prompt:
+```markdown
+When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:
+http://localhost:5173/dashboard-asdf The page remains the same with the login button. BUT, when they press the logout button, it does not redirect — instead, the page goes blank and the console throws this error: App.tsx:32 Maximum update depth exceeded... What does this error mean?"
+```
+The bug resulted from faulty authentication pattern being used in `App.tsx`. I *learned* from this prompting session that it is bad practice to include route authentication login within `App.tsx` in React.
 
+The **prompt loop** for the project looked like this at a high level:     
 
-The workflow at a high level:
-1. Define Project Structure 
-    - 1.1. Create project directories/subdirectories
-        - /backend, /frontend, /db/... 
-    - 1.2. Create DB initialization script ```initalize.sql```
-    - 1.3. Create README.md
-2. Develop & Test Backend
-    - 2.1 Create server with generic endpoint in main()
-        - Containerize with Docker
-            - 2.1.1 Install Docker
-    - 2.1 Write Login/Signup Handlers and register them
-    - 2.2 JWT Session Logic
-    - 2.3 Middleware logic
-    - 2.4 Handler & Middleware Testing
-
-Sample Prompt:
-
+### Prompt Loop
+```
+Init Backend Project Directories
+    ↓
+Init PSQL Database
+    ↓
+Handler Logic
+    ↓
+Dockerize
+    ↓
+Middleware
+    ↓
+JWT
+    ↓
+Tests
+    ↓
+Init React Project
+    ↓
+User Interface
+    ↓
+Wire Endpoints to Server
+    ↓
+Wire JWT
+    ↓
+Negative Testing
+    ↓
+Dockerize
+    ↓
+Final UX/UI Polish
+``` 
 
 ## Copilot Workflow 
 - **Debugging Tailwind**
