@@ -1,10 +1,4 @@
-/**
- * FabrixLogo
- *
- * Renders a geometric, node-based house logo using SVG.
- * Nodes are animated in a fixed wave sequence using CSS keyframes,
- * creating a single pulse that traverses the structure.
- */
+/** Renders the animated Fabrix house logo. */
 
 const nodes = [
     { x: 50, y: 15 },
@@ -26,6 +20,7 @@ const connections = [
     [6, 7],
 ] as const;
 
+// Keep the pulse order fixed so the logo animation is deterministic across renders.
 const orderMap: Record<number, number> = {
     0: 0,
     1: 1,
@@ -44,7 +39,6 @@ function FabrixLogo() {
     return (
         <svg className="block" width="200" height="200" viewBox="0 0 100 100">
 
-            {/* CONNECTION LINES */}
             {connections.map(([a, b], i) => (
                 <line
                     key={i}
@@ -57,7 +51,6 @@ function FabrixLogo() {
                 />
             ))}
 
-            {/* NODES */}
             {nodes.map((node, i) => {
                 const orderIndex = orderMap[i];
 

@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-/**
- * ToastAlert
- *
- * Displays a temporary toast notification based on navigation state.
- *
- * Responsibilities:
- * - Reads navigation state (location.state.toast)
- * - Displays toast when triggered
- * - Auto-dismisses after a delay
- * - Clears navigation state to prevent repeat triggers
- */
+/** Displays a short-lived toast driven by navigation state. */
 
 function ToastAlert() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Incoming (ephemeral) navigation state
   const incomingToast = location.state?.toast;
 
   const [showToast, setShowToast] = useState(false);
@@ -31,7 +20,7 @@ function ToastAlert() {
 
     const hideTimer = window.setTimeout(() => {
       setShowToast(false);
-      // Clear navigation state after the toast has been dismissed
+      // Clear navigation state so the toast does not reappear on the next render.
       navigate(".", { replace: true, state: {} });
     }, 2900);
 

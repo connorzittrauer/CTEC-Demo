@@ -1,6 +1,4 @@
-/**
- * Auth API helpers for signup, login, and logout requests.
- */
+/** Auth API helpers for signup, login, and logout. */
 
 import { apiFetch } from "./client";
 

@@ -1,30 +1,7 @@
 import type { ReactNode } from "react";
 import FabrixLogo from "../components/FabrixLogo";
 
-/**
- * AuthLayout
- *
- * Layout component for authentication views (login / signup).
- *
- * Responsibilities:
- * - Provide a centered, bounded container for auth UI
- * - Split layout into two panes:
- *    • Left: form content (injected via children)
- *    • Right: branding + mode toggle
- * - Handle visual switching between login and signup modes
- *
- * Design Notes:
- * - Purely presentational (no business logic)
- * - Controlled externally via props (mode, setMode)
- * - Optimized for reuse across auth-related pages
- *
- * Structure:
- * - Outer container: full-screen centering
- * - Inner card: fixed-width split layout
- * - Left pane: form injection point
- * - Right pane: branding + navigation toggle
- *
- */
+/** Layout wrapper for the login and signup views. */
 type AuthLayoutProps = {
   children: ReactNode;
   mode: "login" | "signup";
@@ -33,10 +10,7 @@ type AuthLayoutProps = {
 
 function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
   return (
-    // Full-screen container (centers auth card)
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
-
-      {/* Auth card */}
       <div
         className="
           w-full
@@ -48,15 +22,13 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
           flex
         "
       >
-        
-        {/* LEFT PANE — FORM */}
+        {/* Form pane */}
         <div className="w-1/2 flex items-center justify-center bg-secondary">
           <div className="w-full max-w-sm px-8">
             {children}
           </div>
         </div>
-
-        {/* RIGHT PANE — BRANDING + TOGGLE */}
+        {/* Branding pane with auth mode toggle */}
         <div
           className="
             w-1/2
@@ -69,11 +41,8 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
             justify-center
           "
         >
-
-          {/* MODE TOGGLE */}
           <div className="absolute top-6 right-6">
             <div className="flex bg-surface text-lg rounded-md p-1 gap-2">
-
               <button
                 onClick={() => setMode("login")}
                 className={`
@@ -103,11 +72,9 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
               >
                 Signup
               </button>
-
             </div>
           </div>
 
-          {/* BRANDING */}
           <div className="flex flex-col items-center justify-center text-center px-6">
             <FabrixLogo />
 
@@ -119,7 +86,6 @@ function AuthLayout({ children, mode, setMode }: AuthLayoutProps) {
               3D print your tiny home. Pixel by pixel.
             </p>
           </div>
-
         </div>
       </div>
     </div>

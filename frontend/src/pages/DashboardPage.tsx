@@ -40,19 +40,16 @@ function Dashboard() {
   }, [navigate]);
 
   return (
-
     <>
-      {/* Toast Component */}
       <ToastAlert />
 
       <div className="min-h-screen flex flex-col animate-page-in">
-        {/* Header */}
         <header className="flex justify-between items-center p-6 bg-white backdrop-blur  border-gray-200">
           <div className="flex items-center gap-3">
             <img src="/fabrix.svg" alt="Fabrix logo" className="w-8 h-8" />
             <h1 className="text-2xl font-heading">Dashboard</h1>
           </div>
-          
+
           <div className="flex items-center gap-4">
             {email && (
               <p className="text-text text-sm">
@@ -74,7 +71,6 @@ function Dashboard() {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="flex-1 flex items-center justify-center p-8">
           {loading ? (
             <p className="text-text">Loading...</p>

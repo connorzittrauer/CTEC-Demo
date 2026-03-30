@@ -68,6 +68,7 @@ function AuthPage() {
     const [form, setForm] = useState<AuthForm>(EMPTY_FORM);
     const [errors, setErrors] = useState<AuthErrors>(EMPTY_ERRORS);
 
+    // The active mode determines which error bag and required fields apply.
     const currentErrors = errors[mode];
     const isFormValid =
         Object.values(currentErrors).every((e) => e === "") &&
@@ -90,6 +91,7 @@ function AuthPage() {
     };
 
     const handleModeChange = (newMode: AuthMode) => {
+        // Reset transient UI state when switching between login and signup.
         setMode(newMode);
         setSuccessMessage("");
         resetForm();
@@ -103,6 +105,7 @@ function AuthPage() {
             [field]: value,
         }));
 
+        // Revalidate the edited field against the rules for the active mode.
         setErrors((prev) => ({
             ...prev,
             [mode]: {
@@ -117,6 +120,7 @@ function AuthPage() {
 
         setToken(data.token);
 
+        // Delay navigation slightly so the auth transition feels less abrupt.
         setTimeout(() => {
             navigate("/dashboard", {
                 state: { toast: "login-success" },
@@ -158,6 +162,7 @@ function AuthPage() {
             const elapsed = Date.now() - start;
             const minDuration = 300;
 
+            // Keep the spinner visible briefly to avoid a quick flicker on fast responses.
             if (elapsed < minDuration) {
                 setTimeout(() => setLoading(false), minDuration - elapsed);
             } else {
@@ -177,14 +182,12 @@ function AuthPage() {
           animate-fade-slide
         "
             >
-                {/* HEADER */}
                 <h1 className="text-2xl font-heading mb-6 text-text">
                     {mode === "login"
                         ? "Login to your homespace."
                         : "Sign up to start building with Fabrix."}
                 </h1>
 
-                {/* FORM */}
                 <div className="space-y-4">
                     {mode === "signup" && (
                         <>
@@ -230,21 +233,18 @@ function AuthPage() {
                     />
                 </div>
 
-                {/* GLOBAL ERROR */}
                 {error && (
                     <p className="text-red-500 text-sm mt-2 animate-fade-slide">
                         ⚠ {error}
                     </p>
                 )}
 
-                {/* SUCCESS MESSAGE */}
                 {successMessage && (
                     <p className="text-green-600 text-sm mt-2 animate-fade-slide">
                         ✔ {successMessage}
                     </p>
                 )}
 
-                {/* SUBMIT */}
                 <div
                     className={`
             mt-2

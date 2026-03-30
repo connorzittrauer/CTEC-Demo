@@ -7,8 +7,6 @@ import PublicRoute from "./components/PublicRoute";
 function App() {
   return (
     <Routes>
-
-      {/* Auth route */}
       <Route
         path="/auth"
         element={
@@ -17,8 +15,6 @@ function App() {
           </PublicRoute>
         }
       />
-
-      {/* Protected route */}
       <Route
         path="/dashboard"
         element={
@@ -27,13 +23,8 @@ function App() {
           </ProtectedRoute>
         }
       />
-
-      {/* Root redirect */}
       <Route path="/" element={<Navigate to="/auth" replace />} />
-
-      {/* Catch-all */}
       <Route path="*" element={<Navigate to="/auth" replace />} />
-
     </Routes>
   );
 }

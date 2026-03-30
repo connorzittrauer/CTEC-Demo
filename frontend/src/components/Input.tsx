@@ -1,18 +1,4 @@
-/**
- * Input.tsx
- *
- * Reusable controlled input component.
- *
- * Responsibilities:
- * - Render labeled input field
- * - Forward value + onChange
- * - Maintain consistent styling
- * - Support password visibility toggle
- *
- * Designed for:
- * - Login / Signup forms
- * - Easy validation extension later
- */
+/** Reusable form input with optional password visibility toggle. */
 type InputProps = {
   label: string;
   type?: string;

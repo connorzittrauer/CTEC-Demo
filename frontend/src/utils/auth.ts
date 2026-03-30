@@ -1,8 +1,4 @@
-/**
- * Auth Utilities
- *
- * Handles token storage and retrieval.
- */
+/** Auth token storage helpers. */
 
 export const getToken = () => {
   return localStorage.getItem("token");

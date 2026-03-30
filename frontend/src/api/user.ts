@@ -1,8 +1,4 @@
-/**
- * User API
- *
- * Handles authenticated user-related requests
- */
+/** User API helpers for authenticated requests. */
 
 import { apiFetch } from "./client";
 

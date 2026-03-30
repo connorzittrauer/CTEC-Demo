@@ -1,20 +1,11 @@
-/**
- * API Client
- *
- * Centralized wrapper for HTTP requests.
- * Handles:
- * - Base URL
- * - JSON headers
- * - Optional JWT attachment
- * - Consistent error handling
- */
+/** Shared fetch wrapper for frontend API requests. */
 
 import { getToken } from "../utils/auth";
 
 const BASE_URL = "http://localhost:8080";
 
 type RequestOptions = RequestInit & {
-    auth?: boolean; // include JWT if true
+    auth?: boolean;
 };
 
 export async function apiFetch(
@@ -22,16 +13,9 @@ export async function apiFetch(
     options: RequestOptions = {}
 ) {
     const { auth = false, headers, ...rest } = options;
-
-    /**
-     * Normalize headers safely using the Headers API
-     */
+    // Normalize headers once so callers can pass plain objects or Headers instances.
     const finalHeaders = new Headers(headers || {});
-
-    // Always set JSON header
     finalHeaders.set("Content-Type", "application/json");
-
-    // Attach JWT if needed
     if (auth) {
         const token = getToken();
 
