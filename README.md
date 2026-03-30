@@ -12,12 +12,55 @@
 </pre>
 </div>
 
-### Concept
-For this demo, I created a company called ***FABRIX***. A a mock website that allows you to build and 3D print your tiny home. Demo:
+## Concept
+For this demo, I created a company called ***FABRIX***, a mock website that allows you to build and 3D print your tiny home.
 
 <p align="center">
   <img src="docs/images/demo.gif" alt="FABRIX demo" width="700">
 </p>
+
+## Getting Started
+
+For the fastest local run:
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/connorzittrauer/CTEC-Demo.git
+cd CTEC-Demo
+```
+
+2. Copy the backend environment file 
+
+
+```bash
+cp backend/.env.example backend/.env
+```
+*The backend and database read runtime settings from `backend/.env`*
+
+1. Start the production-style Docker stack
+
+```bash
+docker compose up --build
+```
+
+4. Open the app locally
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+- PostgreSQL: `localhost:5433`
+
+5. Optional: run the development Compose stack instead if you want hot reload while editing locally
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+6. Optional: open an interactive PostgreSQL shell
+
+```bash
+docker exec -it auth-db-dev psql -U postgres -d authdb
+```
 
 ## Architecture Overview
 
@@ -60,48 +103,7 @@ backend/    Go API
 db/         PostgreSQL schema initialization
 ```
 
-## Clone the Repository
-
-```bash
-git clone https://github.com/connorzittrauer/CTEC-Demo.git
-cd CTEC-Demo
-```
-
-## Running the Project
-
-Recommended usage:
-
-- Use the production-style Compose run if you are cloning the repo to evaluate or test the submission quickly.
-- Use the development Compose run only if you want hot reload and plan to modify the code locally.
-
-### Production-Style Compose Run (Recommended) 🟢
-
-```bash
-cp backend/.env.example backend/.env
-docker compose up --build
-```
-
-Access:
-
-- Frontend: `http://localhost:5173`
-- Backend: `http://localhost:8080`
-
 ## Runtime Configuration
-
-### Development
-
-```bash
-cp backend/.env.example backend/.env
-docker compose -f docker-compose.dev.yml up --build
-```
-
-Access:
-
-- Frontend: `http://localhost:5173`
-- Backend: `http://localhost:8080`
-- Postgres: `localhost:5433`
-
-
 
 Copy [backend/.env.example](backend/.env.example) to `backend/.env` before starting the project.
 
@@ -109,7 +111,7 @@ Copy [backend/.env.example](backend/.env.example) to `backend/.env` before start
 cp backend/.env.example backend/.env
 ```
 
-The backend and database read runtime settings from `backend/.env`.
+
 
 | Variable | Purpose |
 | --- | --- |
@@ -141,11 +143,6 @@ To reset the database:
 
 ```bash
 docker compose down -v
-```
-
-To open an interactive PostgreSQL shell: 
-```bash  
-docker exec -it auth-db-dev psql -U postgres -d authdb
 ```
 
 ## API Overview
