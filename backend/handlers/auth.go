@@ -28,7 +28,6 @@ type signupRequest struct {
 func LoginHandler(db *sql.DB) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
-		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
 			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",
@@ -38,7 +37,6 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		var user loginRequest
 
-		// Decodes our JSON request into the User struct
 		err := utils.DecodeJSONBody(request, &user)
 		if err != nil {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
@@ -49,7 +47,6 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		user.Email = utils.NormalizeEmail(user.Email)
 
-		// Validates that email and password are provided
 		if validationError := utils.ValidateEmail(user.Email); validationError != "" {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": validationError,
@@ -65,15 +62,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		var storedUser loginRequest
 
-		/**
-		* This case checks if the email exists.
-		*
-		* We return a generic error message when the user is not found
-		* to avoid revealing whether an email exists in the system.
-		* This helps prevent user enumeration attacks.
-
-		*
-		 */
+		// Return a generic auth failure to avoid user enumeration.
 		query := "SELECT email, password FROM users WHERE email=$1"
 		err = db.QueryRow(query, user.Email).Scan(&storedUser.Email, &storedUser.Password)
 
@@ -89,12 +78,6 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		/**
-		 *  This case checks the provided password against the stored hash.
-
-		 *  Compares the provided password with the actual stored hashed password
-		 *	in the database and returns an error if they do not match.
-		 */
 		err = bcrypt.CompareHashAndPassword(
 			[]byte(storedUser.Password),
 			[]byte(user.Password),
@@ -107,11 +90,9 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Generates a JWT token for the user when authenticated
 		token, err := utils.GenerateJWT(storedUser.Email)
 
 		if err != nil {
-			// If token generation fails, return a server error
 			utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{
 				"error": "Error generating JWT token",
 			})
@@ -130,7 +111,6 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 // MeHandler verifies the current authenticated user and returns their email.
 func MeHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		email, ok := middleware.EmailFromContext(r.Context())
 		if !ok || email == "" {
 			utils.WriteJSONResponse(w, http.StatusUnauthorized, map[string]string{
@@ -139,7 +119,7 @@ func MeHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Check if user exists, if not, return an error (handles case where user was deleted after token was issued)
+		// Reject tokens for users who no longer exist.
 		var exists bool
 		err := db.QueryRow(
 			"SELECT EXISTS(SELECT 1 FROM users WHERE email=$1)",
@@ -162,12 +142,9 @@ func MeHandler(db *sql.DB) http.HandlerFunc {
 
 // SignupHandler creates a new user account after validating the request body.
 func SignupHandler(db *sql.DB) http.HandlerFunc {
-
 	return func(writer http.ResponseWriter, request *http.Request) {
-
 		var user signupRequest
 
-		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
 			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",
@@ -175,15 +152,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Decodes our JSON request into the User struct for error handling and validation
 		err := utils.DecodeJSONBody(request, &user)
-
-		/**
-		* Handles bad JSON formats
-		*
-		* Expected incoming JSON:
-		* {"email": "user@citytelecoin.com", "password": "password"}
-		 */
 		if err != nil {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Invalid JSON format",
@@ -220,7 +189,6 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Hashes our password using the bcrypt library
 		hashedPassword, err := bcrypt.GenerateFromPassword(
 			[]byte(user.Password),
 			bcrypt.DefaultCost,
@@ -233,11 +201,6 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		/**
-		*	Insert the user into the database
-		*	$1, $2, $3, and $4 are placeholders to prevent SQL injection attacks
-		*
-		 */
 		_, err = db.Exec(
 			"INSERT INTO users(first_name, last_name, email, password) VALUES($1, $2, $3, $4)",
 			user.FirstName,
@@ -246,9 +209,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			string(hashedPassword),
 		)
 
-		// Checks if a user tries to register with an email that already exists in the database
 		if err != nil {
-			// Check for unique constraint violation
 			if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
 				utils.WriteJSONResponse(writer, http.StatusConflict, map[string]string{
 					"error": "Email already registered",
@@ -271,7 +232,6 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 // LogoutHandler returns a success response for client-side logout flows.
 func LogoutHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		// Only POST allowed
 		if request.Method != http.MethodPost {
 			utils.WriteJSONResponse(writer, http.StatusMethodNotAllowed, map[string]string{
 				"error": "Method not allowed",

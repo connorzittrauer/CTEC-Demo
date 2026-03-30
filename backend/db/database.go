@@ -19,8 +19,7 @@ func InitializeDatabase() *sql.DB {
 		log.Fatal("Error opening database: ", error)
 	}
 
-	// Retry connection until DB is ready
-	// This fixes a docker race condition that can occur when the app starts before the DB is fully initialized.
+	// Wait for Postgres during container startup.
 	for i := 0; i < 10; i++ {
 		error = db.Ping()
 		if error == nil {
