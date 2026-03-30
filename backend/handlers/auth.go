@@ -1,16 +1,26 @@
 package handlers
 
 import (
-	"auth-app/models"
 	"auth-app/utils"
 	"database/sql"
-	"encoding/json"
 	"net/http"
 	"strings"
 
 	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type loginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type signupRequest struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
 
 /* LoginHandler handles the login process for existing users to
  * to be called from the React frontend when a user attempts to log in
@@ -29,10 +39,10 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		var user models.User
+		var user loginRequest
 
 		// Decodes our JSON request into the User struct
-		err := json.NewDecoder(request.Body).Decode(&user)
+		err := utils.DecodeJSONBody(request, &user)
 		if err != nil {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
 				"error": "Invalid JSON format",
@@ -40,15 +50,23 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
+		user.Email = utils.NormalizeEmail(user.Email)
+
 		// Validates that email and password are provided
-		if user.Email == "" || user.Password == "" {
+		if validationError := utils.ValidateEmail(user.Email); validationError != "" {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
-				"error": "Email and password required",
+				"error": validationError,
+			})
+			return
+		}
+		if strings.TrimSpace(user.Password) == "" {
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": "Password is required",
 			})
 			return
 		}
 
-		var storedUser models.User
+		var storedUser loginRequest
 
 		/**
 		* This case checks if the email exists.
@@ -152,7 +170,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 	return func(writer http.ResponseWriter, request *http.Request) {
 
-		var user models.User
+		var user signupRequest
 
 		// Validates that the request method is POST
 		if request.Method != http.MethodPost {
@@ -163,7 +181,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		// Decodes our JSON request into the User struct for error handling and validation
-		err := json.NewDecoder(request.Body).Decode(&user)
+		err := utils.DecodeJSONBody(request, &user)
 
 		/**
 		* Handles bad JSON formats
@@ -178,16 +196,31 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		if user.FirstName == "" || user.LastName == "" || user.Email == "" || user.Password == "" {
+		user.FirstName = strings.TrimSpace(user.FirstName)
+		user.LastName = strings.TrimSpace(user.LastName)
+		user.Email = utils.NormalizeEmail(user.Email)
+
+		if validationError := utils.ValidateName(user.FirstName, "First name"); validationError != "" {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
-				"error": "All fields are required",
+				"error": validationError,
 			})
 			return
 		}
-
-		if !strings.Contains(user.Email, "@") {
+		if validationError := utils.ValidateName(user.LastName, "Last name"); validationError != "" {
 			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
-				"error": "Invalid email format",
+				"error": validationError,
+			})
+			return
+		}
+		if validationError := utils.ValidateEmail(user.Email); validationError != "" {
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": validationError,
+			})
+			return
+		}
+		if validationError := utils.ValidatePassword(user.Password); validationError != "" {
+			utils.WriteJSONResponse(writer, http.StatusBadRequest, map[string]string{
+				"error": validationError,
 			})
 			return
 		}

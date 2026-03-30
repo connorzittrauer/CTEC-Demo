@@ -90,3 +90,6 @@ docker-compose.override.yml
 *.pid
 *.pid.lock
 *.seed
+
+# AI 
+.codex  
