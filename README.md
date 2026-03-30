@@ -1,6 +1,100 @@
-# FRABIX - Tiny Home 3D Printing
+# FABRIX - Design. Build. 3D Print your Tiny Home. Pixel by Pixel. 
+```markdown
+  ___     _     ___   ___   ___  __  __
+ │ __│   ╱_╲   │ _ ) │ _ ╲ │_ _│ ╲ ╲╱ ╱
+ │ _│   ╱ _ ╲  │ _ ╲ │   ╱  │ │   >  < 
+ │_│   ╱_╱ ╲_╲ │___╱ │_│_╲ │___│ ╱_╱╲_╲
+                                       
+```
 ## Concept 
-## ExDesign choices
+## Design choices
+
+## Getting Started
+
+Follow these steps to run the project locally.
+
+### Prerequisites
+- [Docker (20.x+)](https://docs.docker.com/get-docker/)
+- [Docker Compose (2.x+)](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/downloads)
+
+### Installation
+```bash
+git clone https://github.com/connorzittrauer/CTEC-Demo.git
+cd CTEC-Demo
+```
+
+## Run with Docker
+This project supports both development and production environments via Docker Compose.
+
+### Development
+- Hot reloading (Vite, Go Air)
+- Local volume mounts
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+Frontend: http://localhost:5173  
+Backend: http://localhost:8080
+
+### Production
+- Optimized builds
+- No volume mounts
+- Static frontend served via `serve`
+
+```bash
+docker compose up --build
+```
+
+--- 
+
+### Running the Application with Docker  
+This project supports both **development** and **production** environments using Docker Compose.
+
+
+### Development Mode
+Runs the app with:
+* Hot-reloading (Vite + Go Air)
+* Local volume mounts for rapid iteration
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+Access:
+* Frontend: http://localhost:5173
+* Backend: http://localhost:8080
+
+### Production Mode
+Runs the app with:
+* Optimized production builds
+* No volume mounts
+* Static frontend served via `serve`
+
+```bash
+docker compose up --build
+```
+
+---
+
+### Database Initialization
+The PostgreSQL container automatically initializes the schema using:
+
+```
+./db/initialize.sql
+```
+If you need to reset the database:
+
+```bash
+docker compose down -v
+```
+
+
+### Notes
+* Development and production configurations are intentionally separated to reflect real-world deployment practices.
+* Development mode prioritizes speed and flexibility.
+* Production mode prioritizes stability and performance.
+
 
 
 # Tools/Libaries Used
@@ -13,25 +107,7 @@ The JWT session key is exposed and tracked by git. In practice, we would
 **never** push a .env file to github. I simply included it for the purposes
 of this exercise instead of hardcoding it to demonstrate my backend/security fundamentals.
 
-### Getting Started
-1. Clone the repository
-2. Verify the latest version of Docker is installed
-2. Run: 
-```bash
-docker compose up --build
-```
-2. If that fails, you may have existing containers running, shut them down and run:
-```bash
-docker compose down -v
-docker compose build --no-cache
-docker compose up
-```
 
-## Useful Commands
-air init
-go mod init ctec
-
-### Docker Commands
 
 ### PSQL CLI Commands
 Open interactive PostgreSQL shell: 
