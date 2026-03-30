@@ -12,33 +12,31 @@
 </pre>
 </div>
 
-## Concept
-For this demo, I created a company called ***FABRIX***. A a mock website that allows you to build and 3D print your tiny home. 
+### Concept
+For this demo, I created a company called ***FABRIX***. A a mock website that allows you to build and 3D print your tiny home. Demo:
 
-FABRIX is a small full-stack authentication demo built for the CTC coding challenge. It includes:
-- User signup with server-side validation
-- User login with bcrypt password verification
-- JWT-based authenticated session checks
-- Client-side logout
-- Dockerized frontend, backend, and PostgreSQL services
-
-## Stack
-<p align="left">
-  <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-  <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
-  <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
-  <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
-  <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
+<p align="center">
+  <img src="docs/images/demo.gif" alt="FABRIX demo" width="700">
 </p>
 
-- Frontend: React, TypeScript, Vite, Tailwind CSS
-- Backend: Go, `net/http`, PostgreSQL, `bcrypt`, JWT
-- Infrastructure: Docker, Docker Compose
-  
+## Architecture Overview
+
+FABRIX uses a simple three-service architecture:
+
+- The React frontend handles routing, form state, and authenticated UI
+- The Go backend exposes authentication endpoints using `net/http`
+- PostgreSQL stores user records and is initialized from a startup SQL script
+
+Authentication uses JWTs returned by the backend after login. The frontend attaches the token to protected requests, and the backend verifies both the token signature and the user record before returning authenticated data.
+
+## Prerequisites
+
+- Docker
+- Docker Compose
+- Node.js and npm if you want to run frontend tooling outside Docker
+- Go if you want to run the backend locally without containers
+
+
 ## Design choices 
 During the frontend design planning phase, I decided to go with an industrial color pallete:   
 <span style="display:inline-block;width:18px;height:18px;background:#D3D3D3;border:1px solid #999;"></span> 
@@ -48,6 +46,10 @@ During the frontend design planning phase, I decided to go with an industrial co
 <span style="display:inline-block;width:18px;height:18px;background:#313131;border:1px solid #999;"></span> 
 <span style="display:inline-block;width:18px;height:18px;background:#3B3B3F;border:1px solid #999;"></span> 
 <span style="display:inline-block;width:18px;height:18px;background:#5A5A60;border:1px solid #999;"></span> 
+
+The visual direction is intentionally industrial and restrained. The neutral grays suggest concrete, metal, and fabrication materials, while the darker charcoal accent creates emphasis without introducing bright colors that would compete with the content. That keeps the UI feeling structured, engineered, and aligned with the FABRIX brand concept.
+
+I also kept the authentication flow compact by using a unified auth experience instead of splitting the app into multiple disconnected login and signup pages. For a small challenge project, that helped keep the experience focused and the routing model simpler.
 
 
 ## Project Structure
@@ -109,14 +111,14 @@ cp backend/.env.example backend/.env
 
 The backend and database read runtime settings from `backend/.env`.
 
-Variables currently used by the project:
-
-- `JWT_SECRET`
-- `DATABASE_URL`
-- `CORS_ALLOWED_ORIGIN`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_DB`
+| Variable | Purpose |
+| --- | --- |
+| `JWT_SECRET` | Secret used to sign and verify JWTs |
+| `DATABASE_URL` | PostgreSQL connection string used by the backend |
+| `CORS_ALLOWED_ORIGIN` | Frontend origin allowed to call the API |
+| `POSTGRES_USER` | PostgreSQL username for container initialization |
+| `POSTGRES_PASSWORD` | PostgreSQL password for container initialization |
+| `POSTGRES_DB` | Default PostgreSQL database name |
 
 ## Database Initialization
 
@@ -139,6 +141,11 @@ To reset the database:
 
 ```bash
 docker compose down -v
+```
+
+To open an interactive PostgreSQL shell: 
+```bash  
+docker exec -it auth-db-dev psql -U postgres -d authdb
 ```
 
 ## API Overview
@@ -242,6 +249,13 @@ curl -X GET http://localhost:8080/me \
   -H "Authorization: Bearer <JWT_TOKEN>"
 ```
 
+## Known Limitations
+
+- Tokens are handled as a lightweight demo auth flow and are not backed by refresh-token rotation
+- The project does not include password reset, email verification, or account recovery
+- Logout is client-driven and removes the stored token locally rather than maintaining a server-side token revocation list
+- The app is built as a challenge demo, so production concerns such as rate limiting, audit logging, and deeper observability are intentionally minimal
+
 ## Testing
 
 Run backend tests in Docker:
@@ -275,6 +289,36 @@ cd frontend
 npm run build
 npm run lint
 ```
+
+## Stack
+- <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
+- <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+- <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+- <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+- <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+- <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+- <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+- <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+- <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
+  
+### Dev Tooling
+- Developed on   Ubuntu 24.04.4
+- ZSH Shell
+- Git CLI 
+- Docker CLI
+- VSCode
+
+### Design References:
+- [Stripe Login](https://dashboard.stripe.com/login)
+  - Signup button vertical shift animation 
+  - Signup button disabled on empty fields
+- [Dribbble](https://dribbble.com/shots/4013348-Login-web-splitscreen)
+  - Modal auth splitscreen design
+- [Piktochart](https://piktochart.com/tips/industrial-color-palette)
+  - Industrial color palette
+
+
+## Future Implementations
 
 ## Notes
 
