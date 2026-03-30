@@ -1,27 +1,14 @@
 /**
- * Auth API
- *
- * Handles all authentication-related HTTP requests.
- * Keeps API logic separate from UI components.
+ * Auth API helpers for signup and login requests.
  */
 
-const BASE_URL = "http://localhost:8080"; // adjust if needed
+import { apiFetch } from "./client";
 
 export async function login(email: string, password: string) {
-  const res = await fetch(`${BASE_URL}/login`, {
+  return apiFetch("/login", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ email, password }),
   });
-
-  if (!res.ok) {  
-    const err= await res.json();
-    throw new Error(err.error);
-  }
-
-  return res.json(); // expected: { token: "..." }
 }
 
 export async function signup(
@@ -30,11 +17,8 @@ export async function signup(
   email: string,
   password: string
 ) {
-  const res = await fetch(`${BASE_URL}/signup`, {
+  return apiFetch("/signup", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({
       first_name: firstName,
       last_name: lastName,
@@ -42,11 +26,4 @@ export async function signup(
       password,
     }),
   });
-
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error);
-  }
-
-  return res.json();
 }
