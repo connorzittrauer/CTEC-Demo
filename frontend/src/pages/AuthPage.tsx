@@ -11,62 +11,64 @@ import {
 } from "../utils/validation";
 
 /**
- * AuthPage
- *
- * Handles authentication UI and logic for login and signup.
- *
- * Responsibilities:
- * - Manage auth mode (login/signup)
- * - Manage controlled form state
- * - Perform client-side validation
- * - Handle API requests (login/signup)
- * - Render UI via AuthLayout
- *
- * Notes:
- * - Validation is delegated to utils (validation.ts)
- * - API calls are handled via api/auth.ts
- * - UI remains declarative and readable
+ * AuthPage handles the login and signup flows.
  */
+
+type AuthMode = "login" | "signup";
+
+type AuthForm = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+};
+
+type AuthErrors = {
+    login: Pick<AuthForm, "email" | "password">;
+    signup: AuthForm;
+};
+
+const EMPTY_FORM: AuthForm = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+};
+
+const EMPTY_ERRORS: AuthErrors = {
+    login: { email: "", password: "" },
+    signup: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+    },
+};
 
 function getErrorMessage(error: unknown) {
     return error instanceof Error ? error.message : "Something went wrong";
 }
 
+function getFieldError(mode: AuthMode, field: keyof AuthForm, value: string) {
+    if (field === "email") return validateEmail(value);
+    if (field === "password") return validatePassword(value, mode === "signup");
+    if (mode === "signup" && field === "firstName") return validateName(value, "First name");
+    if (mode === "signup" && field === "lastName") return validateName(value, "Last name");
+    return "";
+}
+
 function AuthPage() {
-    // ------------------------
-    // STATE
-    // ------------------------
-    const [mode, setMode] = useState<"login" | "signup">("login");
+    const [mode, setMode] = useState<AuthMode>("login");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
-    const [form, setForm] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-    });
+    const [form, setForm] = useState<AuthForm>(EMPTY_FORM);
+    const [errors, setErrors] = useState<AuthErrors>(EMPTY_ERRORS);
 
-    const [errors, setErrors] = useState({
-        login: { email: "", password: "" },
-        signup: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-        },
-    });
-
-
-
-    // ------------------------
-    // DERIVED STATE
-    // ------------------------
     const currentErrors = errors[mode];
-
     const isFormValid =
         Object.values(currentErrors).every((e) => e === "") &&
         (mode === "login"
@@ -76,64 +78,66 @@ function AuthPage() {
             form.email &&
             form.password);
 
-    // ------------------------
-    // HANDLERS
-    // ------------------------
+    const resetForm = (nextForm: AuthForm = EMPTY_FORM) => {
+        setForm(nextForm);
+    };
 
-    const handleModeChange = (newMode: "login" | "signup") => {
-        setMode(newMode);
-        setSuccessMessage("");
-        setForm({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-        });
-
+    const resetErrors = (nextMode: AuthMode) => {
         setErrors((prev) => ({
             ...prev,
-            [newMode]:
-                newMode === "login"
-                    ? { email: "", password: "" }
-                    : {
-                        firstName: "",
-                        lastName: "",
-                        email: "",
-                        password: "",
-                    },
+            [nextMode]: EMPTY_ERRORS[nextMode],
         }));
+    };
 
+    const handleModeChange = (newMode: AuthMode) => {
+        setMode(newMode);
+        setSuccessMessage("");
+        resetForm();
+        resetErrors(newMode);
         setError("");
     };
 
-    const handleChange = (
-        field: keyof typeof form,
-        value: string
-    ) => {
+    const handleChange = (field: keyof AuthForm, value: string) => {
         setForm((prev) => ({
             ...prev,
             [field]: value,
         }));
 
-        let error = "";
-
-        if (field === "email") error = validateEmail(value);
-        if (field === "password") error = validatePassword(value, mode === "signup");
-
-        if (mode === "signup") {
-            if (field === "firstName")
-                error = validateName(value, "First name");
-            if (field === "lastName")
-                error = validateName(value, "Last name");
-        }
-
         setErrors((prev) => ({
             ...prev,
             [mode]: {
                 ...prev[mode],
-                [field]: error,
+                [field]: getFieldError(mode, field, value),
             },
         }));
+    };
+
+    const handleLogin = async () => {
+        const data = await login(form.email, form.password);
+
+        setToken(data.token);
+
+        setTimeout(() => {
+            navigate("/dashboard", {
+                state: { toast: "login-success" },
+            });
+        }, 200);
+    };
+
+    const handleSignup = async () => {
+        await signup(
+            form.firstName,
+            form.lastName,
+            form.email,
+            form.password
+        );
+
+        setMode("login");
+        resetForm({
+            ...EMPTY_FORM,
+            email: form.email,
+        });
+        setSuccessMessage("Account created. Please log in.");
     };
 
     const handleSubmit = async () => {
@@ -141,41 +145,13 @@ function AuthPage() {
 
         setLoading(true);
         const start = Date.now();
-        // Switch to dashboard immediately on success, but keep the spinner for at least 300ms to prevent jank
+
         try {
             if (mode === "login") {
-                const data = await login(form.email, form.password);
-
-                setToken(data.token);
-
-                // Small delay so spinner is visible + transition feels smooth
-                setTimeout(() => {
-                    navigate("/dashboard", {
-                        state: { toast: "login-success" },
-                    });
-                }, 200);
+                await handleLogin();
             } else {
-                await signup(
-                    form.firstName,
-                    form.lastName,
-                    form.email,
-                    form.password
-                );
-
-                // After signup → switch to login
-                setMode("login");
-                setForm({
-                    firstName: "",
-                    lastName: "",
-                    email: form.email,   // keep email
-                    password: "",        // clear password
-                });
-
-                setSuccessMessage("Account created. Please log in.");
-
-
+                await handleSignup();
             }
-
         } catch (error: unknown) {
             setError(getErrorMessage(error));
         } finally {
@@ -189,10 +165,6 @@ function AuthPage() {
             }
         }
     };
-
-    // ------------------------
-    // RENDER
-    // ------------------------
 
     return (
         <AuthLayout mode={mode} setMode={handleModeChange}>
