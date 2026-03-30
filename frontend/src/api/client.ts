@@ -51,7 +51,9 @@ export async function apiFetch(
         try {
             const err = await res.json();
             message = err.error || message;
-        } catch { }
+        } catch {
+            message = res.statusText || message;
+        }
 
         throw new Error(message);
     }

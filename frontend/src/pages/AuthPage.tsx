@@ -27,6 +27,11 @@ import {
  * - API calls are handled via api/auth.ts
  * - UI remains declarative and readable
  */
+
+function getErrorMessage(error: unknown) {
+    return error instanceof Error ? error.message : "Something went wrong";
+}
+
 function AuthPage() {
     // ------------------------
     // STATE
@@ -171,8 +176,8 @@ function AuthPage() {
 
             }
 
-        } catch (err: any) {
-            setError(err.message || "Something went wrong");
+        } catch (error: unknown) {
+            setError(getErrorMessage(error));
         } finally {
             const elapsed = Date.now() - start;
             const minDuration = 300;

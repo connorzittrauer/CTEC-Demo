@@ -1,5 +1,6 @@
-# FABRIX
-
+# FRABIX - Tiny Home 3D Printing
+## Concept 
+## Design choices 
 FABRIX is a small full-stack authentication demo built for the CTC coding challenge. It includes:
 
 - User signup with server-side validation

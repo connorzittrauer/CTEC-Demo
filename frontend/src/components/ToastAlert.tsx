@@ -8,7 +8,6 @@ import { useLocation, useNavigate } from "react-router-dom";
  *
  * Responsibilities:
  * - Reads navigation state (location.state.toast)
- * - Persists toast type locally (prevents race condition)
  * - Displays toast when triggered
  * - Auto-dismisses after a delay
  * - Clears navigation state to prevent repeat triggers
@@ -21,15 +20,10 @@ function ToastAlert() {
   // Incoming (ephemeral) navigation state
   const incomingToast = location.state?.toast;
 
-  // Persistent state (fixes your bug)
-  const [toastType, setToastType] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false); 
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (!incomingToast) return;
-
-    // Persist the value and delay the appearance so it matches other page animations.
-    setToastType(incomingToast);
 
     const showTimer = window.setTimeout(() => {
       setShowToast(true);
@@ -37,7 +31,6 @@ function ToastAlert() {
 
     const hideTimer = window.setTimeout(() => {
       setShowToast(false);
-      setToastType(null); // cleanup
       // Clear navigation state after the toast has been dismissed
       navigate(".", { replace: true, state: {} });
     }, 2900);
@@ -48,7 +41,7 @@ function ToastAlert() {
     };
   }, [incomingToast, navigate]);
 
-  if (!showToast) return null;
+  if (!showToast || !incomingToast) return null;
   return (
     <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
       <div
@@ -63,8 +56,8 @@ function ToastAlert() {
         animate-page-in
       "
       >
-        {toastType === "login-success" && "✔ Logged in successfully"}
-        {toastType === "signup-success" && "✔ Signup successful. Please log in."}
+        {incomingToast === "login-success" && "Logged in successfully"}
+        {incomingToast === "signup-success" && "Signup successful. Please log in."}
       </div>
     </div>
   );

@@ -5,6 +5,9 @@ import { getCurrentUser } from "../api/user";
 import ToastAlert from "../components/ToastAlert";
 import BuildProgressCard from "../components/BuildProgressCard";
 
+/**
+ * Dashboard renders the authenticated landing page and verifies the session on load.
+ */
 function Dashboard() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
@@ -20,7 +23,7 @@ function Dashboard() {
       try {
         const data = await getCurrentUser();
         setEmail(data.email);
-      } catch (err: any) {
+      } catch {
         removeToken();
         navigate("/auth", { replace: true });
       } finally {
@@ -29,7 +32,7 @@ function Dashboard() {
     };
 
     fetchProtected();
-  }, []);
+  }, [navigate]);
 
   return (
 
