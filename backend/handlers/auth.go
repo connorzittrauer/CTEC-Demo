@@ -1,3 +1,4 @@
+// Package handlers contains the HTTP handlers for authentication endpoints.
 package handlers
 
 import (
@@ -22,12 +23,7 @@ type signupRequest struct {
 	Password  string `json:"password"`
 }
 
-/* LoginHandler handles the login process for existing users to
- * to be called from the React frontend when a user attempts to log in
- *
- * @param db *sql.DB - The database connection
- * @return http.HandlerFunc - The login handler function
- */
+// LoginHandler authenticates an existing user and returns a JWT on success.
 func LoginHandler(db *sql.DB) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
@@ -130,11 +126,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 }
 
-/**
- * MeHandler handles requests to verify the current user's authentication status.
- * @param db *sql.DB - The database connection
- * @return http.HandlerFunc - The me handler function
- */
+// MeHandler verifies the current authenticated user and returns their email.
 func MeHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -161,11 +153,7 @@ func MeHandler(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-/**
- * SignupHandler handles the signup process for new users
- * @param db *sql.DB - The database connection
- * @return http.HandlerFunc - The signup handler function
- */
+// SignupHandler creates a new user account after validating the request body.
 func SignupHandler(db *sql.DB) http.HandlerFunc {
 
 	return func(writer http.ResponseWriter, request *http.Request) {
@@ -273,14 +261,7 @@ func SignupHandler(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-/**
- * LogoutHandler handles user logout.
- *
- * Since we are using JWT (stateless authentication),
- * logout is handled on the client by deleting the token.
- *
- * This endpoint exists to satisfy API completeness.
- */
+// LogoutHandler returns a success response for client-side logout flows.
 func LogoutHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		// Only POST allowed
