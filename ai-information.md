@@ -11,13 +11,13 @@
 - ***Free tier***
 
 ### 3 Codex (Auditing)
-- VSCode Extension
-- ***Go Tier***
+- VS Code Extension
+- GPT-5.4
 
 ## ChatGPT Workflow
 ### Use Cases 
 #### **I. Project Guidance**
-  - I started with the **/backend** of the application, I fed ChatGPT the project requiremnts and instructed it to walkthrough each step of the entire design process after submitting the requirements for the project.  I specifically instructure to not offer every solution at once. Instead, we implemented each feature one at a time. 
+  - I started with the **/backend** of the application. I fed ChatGPT the project requirements and instructed it to walk through each step of the entire design process after submitting the requirements for the project. I specifically instructed it not to offer every solution at once. Instead, we implemented each feature one at a time. 
   - 
 The **prompt loop** for the project looked like this at a high level:     
 
@@ -52,25 +52,25 @@ Dockerize
 Final UX/UI Polish
 ``` 
 Additionally:
-  - ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the **Go** code by hand, instead of copying and pasting. 
+  - ChatGPT would offer the generated scripts for the project and a detailed explanation of what each code block was doing. I wrote the **Go** code by hand instead of copying and pasting. 
   
-  - Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
+  - Instead of blind copy-pasting from ChatGPT, for the purposes of this project, I found it important to 
   get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
-  understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
-  vscode ai-generated tab completion and audit heavily in my workflows. 
+  understanding of the Go syntax/language. As my comfort with Go increased, I became more keen to accept
+  VSCode AI-generated tab completion and audit heavily in my workflows. 
 
-**Inital prompt:** 
+**Initial prompt:** 
 ```markdown
-I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up,  carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicity instruct you to move to the next step."
+I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up, carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicitly instruct you to move to the next step."
 ```
 This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
 
 #### **II. Learning Go**    
-Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. I have solid fundamentals in full stack web design. I explain this to ChatGPT and prompted it to explain each script it that it offered during the desing process. 
+Whenever ChatGPT generated a script, I instructed it that I had a full-stack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. I have solid fundamentals in full-stack web design. I explained this to ChatGPT and prompted it to explain each script that it offered during the design process. 
 
 Here are some important Go concepts I learned while building out the backend:
 - "***What's Convention in Go?"***
-    - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, I structured my project as to adhere to D.R.Y (don't repeat yourself) and Single Responsibilty design practices. Such that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly handled session token, etc.
+    - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, I structured my project to adhere to D.R.Y. (don't repeat yourself) and Single Responsibility design practices, such that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly handled session tokens, etc.
 - **JWT Session Handling**
     - JWT session handling is a bit new to me. I had never implemented it from scratch. So, I carefully read the generated code in ```jwt.go``` 
 - **Syntax Explanation**
@@ -93,12 +93,12 @@ The bug resulted from faulty authentication pattern being used in `App.tsx`. I *
 
 ## Copilot Workflow 
 **I. Debugging Tailwind**
-- I do most of my CSS debugging in the browswer console or by hand in the code, but 
-  I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
-- I would highlight the snippet and prompt at fix
+- I do most of my CSS debugging in the browser console or by hand in the code, but 
+  I found the built-in Copilot in VSCode useful for debugging tricky layout/CSS issues when I could not identify the issue in the browser console.
+- I would highlight the snippet and prompt a fix
   
-**II. Rapid TailwingCSS Styling**
-  - While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time.  
+**II. Rapid TailwindCSS Styling**
+  - While I consulted ChatGPT for boilerplate TailwindCSS, I also used *Copilot* in VSCode to quickly edit CSS to save time.  
 
 Sample prompt:
 ```markdown
@@ -132,48 +132,44 @@ The bug resulted from an incomplete client-side routing pattern. While I had imp
 
 
 
-### Explanatory Code Snippets
-
-
 ## ⚠️ AI-Generated Code Shortfalls 
-### 1. Abstraction
-While AI quickly generated scripts for me, it often fell short in modularizing code, ChatGPT often suggested longer project files than I was comfortable with. 
-For example, in ```backend/handlers/auth.go``` where we handle our JSON logic for sending http requests
+### 1. Lack of Abstraction
+While AI quickly generated scripts for me, it often fell short in modularizing code and abstraction. ChatGPT often suggested longer project files than I was comfortable with. It's important 
+
+For example, in `backend/handlers/auth.go` where we handle our JSON logic for sending http requests
 to our handlers, ChatGPT generated scripts included logic for JWT session token generation as well
-as JSON response handling. I felt it important to abstract these duties out to separate files into
-utility modules, ```jwt.go``` and ```response.go```, respectively
+as JSON response handling. I felt it was important to abstract these duties out to separate utility modules,
+```jwt.go``` and ```response.go```, respectively at adhere as closely as possible to the design principle of *single responsibility*
 
-### 2. Abstraction Foresi
-ChatGPT started suggesting vebose strategies while I was debugging the ```/login``` endpoint in Postman and a *"connection refused error"* in docker. 
-AI suggested adding a for-loop in my initialization logic to ping the DB connection. After auditing this, my instinct told me this was overkill:
+### 2. Errors 
+While errors like this is are relatively rare, ChatGPT suggested code sometimes failed to fully implement the requirements. When auditing the  generated React code at the end of the, I noticed my `DashboardPage` logout button was not actually  calling my /logout endpoint. 
 
-```go
-func InitializeDatabase() *sql.DB {
-	connectionString :=  ...
+```js
+const handleLogout = () => {
+    removeToken(); // We remove the token, but never hit the endpoint
+    navigate("/auth", { replace: true }); 
+};
 
-    // initialization logic
-    ...
-    ...
-
-	// For-loop?
-	for i := 0; i < 5; i++ {
-		err = db.Ping()
-		if err == nil {
-			log.Println("Successfully connected to database")
-			return db
-		}
-
-		log.Println("Waiting for database...")
-		time.Sleep(2 * time.Second)
-	}
-}
 ```
-The ultimate solution resulted from a duplicate instance of docker running. I ran ```docker prune``` and restarted the docker containers, and the
-issue resolved itself. This shows the importance of **auditing AI-generated solutions/debugging**. 
+More importantly, the frontend API bridge, `auth.ts`, did not yet define a `logout()` function:
+```js
+export async function login(email: string, password: string) {
+  return apiFetch("/login", 
+  ...
+  ...
+export async function signup(
+  return apiFetch("/signup", 
+
+// Missing /logout function defintion to backend  
+```
+
+The function had never been defined. While the `/logout` handler in our code is mainly symbolic, this could have introduced bugs and errors later if the project scope broadened and we enhanced `/logout` functionality in the backend.
+
+This example shows the importance of **auditing AI-generated solutions!**. 
 
 ### 3. Overengineered Solutions
 ChatGPT can sometimes offer over-engineered solutions to problems. While I was testing the `/Signup` form in the frontend, I asked it
-what **convention** would dictate be the best error message to send when a user tries to sign up with a duplicate email. We were already sending
+what **convention** would dictate the best error message to send when a user tries to sign up with a duplicate email. We were already sending
 a JSON error message from the backend in our `/handlers`: 
 ```go
 if err != nil {
@@ -183,17 +179,13 @@ if err != nil {
     return
 }
 ```
-ChatGPT recommended instead to modfy the *frontend*  check the error message, and map it to a different message
+ChatGPT recommended instead modifying the *frontend* to check the error message and map it to a different message:
 ```typescript
 if (err.message.includes("Email already registered")) {
 setError("An account with this email already exists.");
     }
 ```
-This is overengineered an unecssary as all we needed to do was update the backend error message.  This shows the importance of **auditing AI-generated solutions/debugging** to avoid adding unnecessary complexity. When pointed out, ChatGPT acknowledged this was bad practice. 
+This is overengineered and unnecessary, as all we needed to do was update the backend error message. This shows the importance of **auditing AI-generated solutions/debugging** to avoid adding unnecessary complexity. When pointed out, ChatGPT acknowledged this was bad practice. 
 
 Why did you suggest changing it in the front? Why not just change it in the auth.,go? Here: if err != nil { utils.WriteJSONResponse(writer, http.StatusInternalServerError, map[string]string{ "error": "User may already exist", }) return
 
-### 3. Incorrect /route definitions
-talk about how you instructe chatgpt that you wanted a modal login page, but it gave you unecssary routes for /login and /signup 
-before you decided to switch to a singular /auth route. This demonstrates the necessary to audit AI-generated code before implementation. 
-This could have generated too much boilerplate for later cleanup. 

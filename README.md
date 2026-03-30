@@ -19,6 +19,13 @@ For this demo, I created a company called ***FABRIX***, a mock website that allo
   <img src="docs/images/demo.gif" alt="FABRIX demo" width="700">
 </p>
 
+## Prerequisites
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) if you want to run frontend tooling outside Docker
+- [Go](https://go.dev/) if you want to run the backend locally without containers
+
 ## Getting Started
 
 For the fastest local run:
@@ -38,7 +45,7 @@ cp backend/.env.example backend/.env
 ```
 *The backend and database read runtime settings from `backend/.env`*
 
-1. Start the production-style Docker stack
+3. Start the production-style Docker stack
 
 ```bash
 docker compose up --build
@@ -72,29 +79,6 @@ FABRIX uses a simple three-service architecture:
 
 Authentication uses JWTs returned by the backend after login. The frontend attaches the token to protected requests, and the backend verifies both the token signature and the user record before returning authenticated data.
 
-## Prerequisites
-
-- Docker
-- Docker Compose
-- Node.js and npm if you want to run frontend tooling outside Docker
-- Go if you want to run the backend locally without containers
-
-
-## Design choices 
-During the frontend design planning phase, I decided to go with an industrial color pallete:   
-<span style="display:inline-block;width:18px;height:18px;background:#D3D3D3;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#E9E9E9;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#C0C0C0;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#D9DBDD;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#313131;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#3B3B3F;border:1px solid #999;"></span> 
-<span style="display:inline-block;width:18px;height:18px;background:#5A5A60;border:1px solid #999;"></span> 
-
-The visual direction is intentionally industrial and restrained. The neutral grays suggest concrete, metal, and fabrication materials, while the darker charcoal accent creates emphasis without introducing bright colors that would compete with the content. That keeps the UI feeling structured, engineered, and aligned with the FABRIX brand concept.
-
-I also kept the authentication flow compact by using a unified auth experience instead of splitting the app into multiple disconnected login and signup pages. For a small challenge project, that helped keep the experience focused and the routing model simpler.
-
-
 ## Project Structure
 
 ```text
@@ -103,6 +87,28 @@ backend/    Go API
 db/         PostgreSQL schema initialization
 ```
 
+## UI Design choices 
+### Colors:
+During the frontend design planning phase, I decided to go with an industrial color pallete to suggest a prefab + tech oriented theme:   
+<table>
+  <tr>
+    <td bgcolor="#D3D3D3" width="24" height="24"></td>
+    <td bgcolor="#E9E9E9" width="24" height="24"></td>
+    <td bgcolor="#C0C0C0" width="24" height="24"></td>
+    <td bgcolor="#D9DBDD" width="24" height="24"></td>
+    <td bgcolor="#313131" width="24" height="24"></td>
+    <td bgcolor="#3B3B3F" width="24" height="24"></td>
+    <td bgcolor="#5A5A60" width="24" height="24"></td>
+  </tr>
+</table>
+
+
+The visual direction is intentionally industrial and restrained. T.
+
+### Typography
+_______
+
+
 ## Runtime Configuration
 
 Copy [backend/.env.example](backend/.env.example) to `backend/.env` before starting the project.
@@ -110,8 +116,6 @@ Copy [backend/.env.example](backend/.env.example) to `backend/.env` before start
 ```bash
 cp backend/.env.example backend/.env
 ```
-
-
 
 | Variable | Purpose |
 | --- | --- |
