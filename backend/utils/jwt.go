@@ -1,25 +1,36 @@
+// Package utils contains shared helpers for HTTP request and response handling.
 package utils
 
 import (
-	"time" 
+	"errors"
+	"fmt"
 	"os"
-	"github.com/golang-jwt/jwt/v5" 
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
-// GetJWTSecret retrieves the JWT secret from environment variables at runtime
-func GetJWTSecret() []byte {
+// ErrMissingJWTSecret indicates that JWT signing is not configured.
+var ErrMissingJWTSecret = errors.New("JWT_SECRET not set in environment variables")
+
+// GetJWTSecret retrieves the JWT secret from environment variables.
+func GetJWTSecret() ([]byte, error) {
 	secret := os.Getenv("JWT_SECRET")
 
-	// Fail fast if missing
 	if secret == "" {
-		panic("JWT_SECRET not set in environment variables.")
+		return nil, ErrMissingJWTSecret
 	}
 
-	return []byte(secret)
+	return []byte(secret), nil
 }
 
-// Generates a signed JWT token for a given user email
+// GenerateJWT signs a JWT for the provided user email.
 func GenerateJWT(email string) (string, error) {
+	secret, err := GetJWTSecret()
+	if err != nil {
+		return "", err
+	}
+
 	claims := jwt.MapClaims{
 		"email": email,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(), // Token expires in 24 hours
@@ -28,6 +39,32 @@ func GenerateJWT(email string) (string, error) {
 	// Creates a new JWT token with the specified claims and signing method
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Sign the token with the secret key and return the string version 
-	return token.SignedString(GetJWTSecret())
+	// Sign the token with the secret key and return the string version
+	return token.SignedString(secret)
+}
+
+// ParseJWT validates a token string and returns its claims.
+func ParseJWT(tokenString string) (jwt.MapClaims, error) {
+	secret, err := GetJWTSecret()
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if token.Method.Alg() != jwt.SigningMethodHS256.Alg() {
+			return nil, fmt.Errorf("unexpected signing method: %s", token.Method.Alg())
+		}
+
+		return secret, nil
+	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
+	if err != nil || !token.Valid {
+		return nil, errors.New("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("invalid token claims")
+	}
+
+	return claims, nil
 }

@@ -102,10 +102,9 @@ docker compose down -v
 For hot reloading Go
 go install github.com/cosmtrek/air@latest
 
-### Exposed JWT key! (intentional)
-The JWT session key is exposed and tracked by git. In practice, we would
-**never** push a .env file to github. I simply included it for the purposes
-of this exercise instead of hardcoding it to demonstrate my backend/security fundamentals.
+### JWT Configuration
+The backend reads the JWT secret from `backend/.env` at runtime.
+JWT signing and validation are both handled server-side using `HS256`.
 
 
 
@@ -140,12 +139,15 @@ Sample output after reseeding or new inserts:
 ├── Description: Registers a new user
 ├── Handler: `handlers/auth.go → SignupHandler`
 ├── Request Body:
-│   ├── firstName (string, required)
-│   ├── lastName  (string, required)
+│   ├── first_name (string, required)
+│   ├── last_name  (string, required)
 │   ├── email     (string, required)
 │   └── password  (string, required)
 ├── Behavior:
-│   ├── Validates input
+│   ├── Rejects malformed JSON and unknown fields
+│   ├── Normalizes the email before validation/storage lookup
+│   ├── Validates required fields
+│   ├── Enforces password rules (8+ chars, uppercase, lowercase, number)
 │   ├── Hashes password using bcrypt
 │   ├── Stores user in database
 │   └── Returns success message
@@ -161,6 +163,8 @@ Sample output after reseeding or new inserts:
 │   ├── email    (string, required)
 │   └── password (string, required)
 ├── Behavior:
+│   ├── Rejects malformed JSON and unknown fields
+│   ├── Normalizes the email before lookup
 │   ├── Retrieves user from database
 │   ├── Compares password using bcrypt
 │   ├── Generates JWT token
@@ -170,16 +174,17 @@ Sample output after reseeding or new inserts:
     ├── 401 Unauthorized
     └── 500 Internal Server Error
 
-/protected   (GET)
-├── Description: Example protected route
+/me   (GET)
+├── Description: Verifies the current authenticated user
 ├── Handler: `main.go` (wrapped with middleware)
 ├── Middleware: `middleware/auth.go → AuthMiddleware`
 ├── Headers:
 │   └── Authorization: Bearer <JWT_TOKEN>
 ├── Behavior:
-│   ├── Validates JWT
+│   ├── Validates JWT using the configured server secret
+│   ├── Enforces the expected JWT signing method
 │   ├── Extracts user email from token
-│   └── Returns protected data
+│   └── Returns the authenticated email if the user still exists
 └── Responses:
     ├── 200 OK
     └── 401 Unauthorized
@@ -201,10 +206,10 @@ Sample output after reseeding or new inserts:
 curl -X POST http://localhost:8080/signup \
   -H "Content-Type: application/json" \
   -d '{
-    "firstName": "John",
-    "lastName": "Doe",
+    "first_name": "John",
+    "last_name": "Doe",
     "email": "you@citytelecoin.com",
-    "password": "secure_password"
+    "password": "SecurePass1"
   }'
 ```
 #### Response:
@@ -217,7 +222,7 @@ curl -X POST http://localhost:8080/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "you@citytelecoin.com",
-    "password": "secure_password"
+    "password": "SecurePass1"
   }'
 ```
 ### Response:
@@ -228,12 +233,12 @@ curl -X POST http://localhost:8080/login \
 ### Access Protected Route
 Replace <JWT_TOKEN> with the token returned from ```/login```:
 ```bash
-curl -X GET http://localhost:8080/protected \
+curl -X GET http://localhost:8080/me \
   -H "Authorization: Bearer <JWT_TOKEN>"
 ```
 ### Response:
 ```json
-{"email":"you@citytelecoin.com","message":"You accessed a protected route!"}
+{"message":"Authenticated","email":"you@citytelecoin.com"}
 ```
 
 ## Testing

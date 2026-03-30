@@ -9,7 +9,8 @@ import (
 
 // Test protected route access with valid token
 func TestAuthMiddleware_ValidToken(test *testing.T) {
-	
+	test.Setenv("JWT_SECRET", "test-secret")
+
 	token, _ := utils.GenerateJWT("user@citytelecoin.com")
 
 	// Build request
@@ -18,7 +19,7 @@ func TestAuthMiddleware_ValidToken(test *testing.T) {
 
 	respRequest := httptest.NewRecorder()
 
-	// Dummy handler 
+	// Dummy handler
 	handler := AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
@@ -32,6 +33,7 @@ func TestAuthMiddleware_ValidToken(test *testing.T) {
 
 // Test protected route access without token
 func TestAuthMiddleware_NoToken(test *testing.T) {
+	test.Setenv("JWT_SECRET", "test-secret")
 
 	request, _ := http.NewRequest("GET", "/protected", nil)
 	respRequest := httptest.NewRecorder()
@@ -45,6 +47,5 @@ func TestAuthMiddleware_NoToken(test *testing.T) {
 	if respRequest.Code != http.StatusUnauthorized {
 		test.Errorf("Expected 401, got %d", respRequest.Code)
 	}
-	
 
 }

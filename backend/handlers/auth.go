@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"auth-app/middleware"
 	"auth-app/utils"
 	"database/sql"
 	"net/http"
@@ -130,7 +131,13 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 func MeHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		email := r.Context().Value("email").(string)
+		email, ok := middleware.EmailFromContext(r.Context())
+		if !ok || email == "" {
+			utils.WriteJSONResponse(w, http.StatusUnauthorized, map[string]string{
+				"error": "Unauthorized",
+			})
+			return
+		}
 
 		// Check if user exists, if not, return an error (handles case where user was deleted after token was issued)
 		var exists bool
