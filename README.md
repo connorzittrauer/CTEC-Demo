@@ -1,8 +1,21 @@
-# FRABIX - Tiny Home 3D Printing
-## Concept 
-## Design choices 
-FABRIX is a small full-stack authentication demo built for the CTC coding challenge. It includes:
+# FABRIX - Tiny Home 3D Printing
+<div align="center">
+<pre>
+╱╲╲╲╲╲╲╲╲            ╱╲             ╱╲╲ ╱╲╲         ╱╲╲╲╲╲╲╲          ╱╲╲      ╱╲╲      ╱╲╲
+╱╲╲                 ╱╲ ╲╲           ╱╲    ╱╲╲       ╱╲╲    ╱╲╲        ╱╲╲       ╱╲╲   ╱╲╲  
+╱╲╲                ╱╲  ╱╲╲          ╱╲     ╱╲╲      ╱╲╲    ╱╲╲        ╱╲╲        ╱╲╲ ╱╲╲   
+╱╲╲╲╲╲╲           ╱╲╲   ╱╲╲         ╱╲╲╲ ╱╲         ╱╲ ╱╲╲            ╱╲╲          ╱╲╲     
+╱╲╲              ╱╲╲╲╲╲╲ ╱╲╲        ╱╲     ╱╲╲      ╱╲╲  ╱╲╲          ╱╲╲        ╱╲╲ ╱╲╲   
+╱╲╲             ╱╲╲       ╱╲╲       ╱╲      ╱╲      ╱╲╲    ╱╲╲        ╱╲╲       ╱╲╲   ╱╲╲  
+╱╲╲            ╱╲╲         ╱╲╲      ╱╲╲╲╲ ╱╲╲       ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲
+                                                                                           
+</pre>
+</div>
 
+## Concept
+For this demo, I created a company called ***FABRIX***. A a mock website that allows you to build and 3D print your tiny home. 
+
+FABRIX is a small full-stack authentication demo built for the CTC coding challenge. It includes:
 - User signup with server-side validation
 - User login with bcrypt password verification
 - JWT-based authenticated session checks
@@ -10,10 +23,32 @@ FABRIX is a small full-stack authentication demo built for the CTC coding challe
 - Dockerized frontend, backend, and PostgreSQL services
 
 ## Stack
+<p align="left">
+  <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+  <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+  <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
+</p>
 
 - Frontend: React, TypeScript, Vite, Tailwind CSS
 - Backend: Go, `net/http`, PostgreSQL, `bcrypt`, JWT
 - Infrastructure: Docker, Docker Compose
+  
+## Design choices 
+During the frontend design planning phase, I decided to go with an industrial color pallete:   
+<span style="display:inline-block;width:18px;height:18px;background:#D3D3D3;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#E9E9E9;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#C0C0C0;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#D9DBDD;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#313131;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#3B3B3F;border:1px solid #999;"></span> 
+<span style="display:inline-block;width:18px;height:18px;background:#5A5A60;border:1px solid #999;"></span> 
+
 
 ## Project Structure
 

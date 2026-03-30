@@ -10,9 +10,9 @@
 - Claude Haiku 4.5
 - ***Free tier***
 
-### 3 Ollama Deepseek 
-- <Model Name
-- ***Local Install*** 
+### 3 Codex (Auditing)
+- VSCode Extension
+- ***Go Tier***
 
 ## ChatGPT Workflow
 ### Use Cases 
@@ -66,8 +66,6 @@ I have to do this project for work: requirements.pdf ... Let's walk through this
 This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
 
 #### **II. Learning Go**    
-
-
 Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. I have solid fundamentals in full stack web design. I explain this to ChatGPT and prompted it to explain each script it that it offered during the desing process. 
 
 Here are some important Go concepts I learned while building out the backend:
@@ -107,7 +105,7 @@ Sample prompt:
 I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons.  
 ```
 
-## Ollama Workflow
+## Codex Workflow
 ____to be continued____
 
 Which yielded quick results. 
