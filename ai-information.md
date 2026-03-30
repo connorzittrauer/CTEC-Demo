@@ -1,30 +1,31 @@
-### AI-Tools Used
-1. ChatGPT (Primary)
-2. Copilot (Supplemental)
 
-### ChatGPT (Browser)
-ChatGPT often suggested longer project files than I was comfortable with. 
-For example, in ```backend/handlers/auth.go``` where we handle our JSON logic for sending http requests
-to our handlers, ChatGPT generated scripts included logic for JWT session token generation as well
-as JSON response handling. I felt it important to abstract these duties out to separate files into
-utility modules, ```jwt.go``` and ```response.go```, respectively
+# AI Information
+🔴 **NOTICE:** I wrote this document myself. I only used AI to help me format a few things in markdown and check grammar.       
+
+## AI Tools Used
+### 1. ChatGPT (Primary)
+- Browser
+- ***Go Tier***
+### 2. Copilot (Supplemental)
+- Claude Haiku 4.5
+- ***Free tier***
+
+### 3 Ollama Deepseek 
+- <Model Name
+- ***Local Install*** 
+
+## ChatGPT Workflow
+### Use Cases: 
+- **Project Guidance**
+    - At the beginning of the project, I fed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project.  Instead of offering every solution at once, we implemented each feature one at a time. ChatGPT would offer the generated  scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying and pasting. 
+
+This allowed me to audit each line, especially since I am new to golang. 
 
 - Instead of blind copy-pasting from chatgpt, for the purposes of this project, I found it important to 
 get a feel for Go syntax when writing my files, even if I was copying from ChatGPT. This gave me a better
 understanding of the Go syntax/language. As my comfort with go increased, I will be more keen to accept
 vscode ai-generated tab completion and audit heavily in my workflows. 
 
-### Copilot (VSCode)
-- Debugging Tailwind
-    - I do most of my CSS debugging in the browswer console or by hand in the code, but 
-      I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
-        - I would highlight the snippet and prompt at fix
-
-## Workflow 
-I instructed ChatGPT to walkthrough each step of the entire design process after submitting the requirements for the project. 
-Instead of offering every solution at once, we implemented each feature one at a time. ChatGPT would offer the generated 
-scripts for the project and a detailed explanation of what each code block was doing. I wrote the code by hand, instead of copying
-and pasting. This allowed me to audit each line, especially since I am new to golang. 
 
 The workflow at a high level:
 1. Define Project Structure 
@@ -41,12 +42,29 @@ The workflow at a high level:
     - 2.3 Middleware logic
     - 2.4 Handler & Middleware Testing
 
+Sample Prompt:
+
+
+## Copilot Workflow 
+- **Debugging Tailwind**
+    - I do most of my CSS debugging in the browswer console or by hand in the code, but 
+      I found the built-in copilot in VSCode useful for debugging tricky layout/CSS ussues when I could not identify the issue in the browser console.
+        - I would highlight the snippet and prompt at fix
+- Quickly
+- **Rapid TailwingCSS Styling**
+    - While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time.  
+
+
+
+
+## Ollama Workflow
+
 
 
 ## Use Cases
 
-### 2. Rapid TailwingCSS Stlying
-While I consulted ChatGPT for boileplate TailwindCSS, I also used *copilot* in vscode to quickly edit CSS to save time. 
+
+
 Example prompt:
 > *"I want to add a one of those icons in my password field that you can click to view the password. One of the eye icons."*
 
@@ -93,12 +111,11 @@ Golang concepts I learned while building out the backend:
 
 ## Learning Go
 ### Explanatory Code Snippets
-
 Whenever ChatGPT generated a script. I instructed ChatGPT that I had a fullstack background but wanted a thorough explanation for each block. I specifically prompted it to explain each line or code block it offered. 
 At the outset, ``backend/handlers/auth.go```
 I wanted to have a solid understanding of what  
 
-## AI-Generated Code Shortfalls ⚠️
+## ⚠️ AI-Generated Code Shortfalls 
 ### 1. Abstraction
 While AI quickly generated scripts for me, it often fell short in modularizing code, ChatGPT often suggested longer project files than I was comfortable with. 
 For example, in ```backend/handlers/auth.go``` where we handle our JSON logic for sending http requests
@@ -106,7 +123,7 @@ to our handlers, ChatGPT generated scripts included logic for JWT session token 
 as JSON response handling. I felt it important to abstract these duties out to separate files into
 utility modules, ```jwt.go``` and ```response.go```, respectively
 
-### 2. Docker Debugging Hallucinations
+### 2. Abstraction Foresi
 ChatGPT started suggesting vebose strategies while I was debugging the ```/login``` endpoint in Postman and a *"connection refused error"* in docker. 
 AI suggested adding a for-loop in my initialization logic to ping the DB connection. After auditing this, my instinct told me this was overkill:
 
