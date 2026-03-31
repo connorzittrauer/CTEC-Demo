@@ -379,13 +379,36 @@ npm run lint
 During the frontend design planning phase, I decided to go with an industrial color palette to suggest a prefab + tech oriented theme:   
 <table>
   <tr>
+    <th>Swatch</th>
+    <th>Hex</th>
+  </tr>
+  <tr>
     <td bgcolor="#D3D3D3" width="24" height="24"></td>
+    <td><code>#D3D3D3</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#E9E9E9" width="24" height="24"></td>
+    <td><code>#E9E9E9</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#C0C0C0" width="24" height="24"></td>
+    <td><code>#C0C0C0</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#D9DBDD" width="24" height="24"></td>
+    <td><code>#D9DBDD</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#313131" width="24" height="24"></td>
+    <td><code>#313131</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#3B3B3F" width="24" height="24"></td>
+    <td><code>#3B3B3F</code></td>
+  </tr>
+  <tr>
     <td bgcolor="#5A5A60" width="24" height="24"></td>
+    <td><code>#5A5A60</code></td>
   </tr>
 </table>
 
