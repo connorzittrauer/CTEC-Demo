@@ -130,6 +130,7 @@ This uses the production stage of the backend image. It does not install `air`.
 5. Optional: run the development stack if you want hot reload while editing locally
 
 ```bash
+docker compose down -v
 docker compose -f docker-compose.dev.yml up --build
 ```
 
