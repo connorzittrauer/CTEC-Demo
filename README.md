@@ -79,35 +79,40 @@ FABRIX uses a simple three-service architecture:
 
 Authentication uses JWTs returned by the backend after login. The frontend attaches the token to protected requests, and the backend verifies both the token signature and the user record before returning authenticated data.
 
+<div align="center">
+<pre>
+┌─────────┐    ┌─────────────────┐    ┌───────────────┐    ┌────────────────┐
+│ Browser │ -> │ Frontend        │ -> │ Backend       │ -> │ PostgreSQL     │
+│         │    │ React + TS      │    │ Go + net/http │    │ SQL database   │
+│         │    │ Vite on :5173   │    │ API on :8080  │    │                │
+└─────────┘    └─────────────────┘    └───────────────┘    └────────────────┘
+</pre>
+</div>
+JWT flow:
+token stored after login -> bearer token sent -> token verified
+
+
 ## Project Structure
-
 ```text
-frontend/   React client
-backend/    Go API
-db/         PostgreSQL schema initialization
+frontend/                  React + TypeScript client
+  src/                     Pages, components, routing, API helpers
+  public/                  Static assets
+
+backend/                   Go authentication API
+  handlers/                HTTP handlers
+  middleware/              JWT/auth middleware
+  models/                  Request/response data structures
+  utils/                   Shared helpers
+  config/                  Environment/config loading
+  db/                      Database access logic
+
+db/
+  initialize.sql           PostgreSQL schema bootstrap
+
+docker-compose.yml         Production-style local run
+docker-compose.dev.yml     Development run with hot reload
+ai-information.md          AI usage disclosure
 ```
-
-## UI Design choices 
-### Colors:
-During the frontend design planning phase, I decided to go with an industrial color pallete to suggest a prefab + tech oriented theme:   
-<table>
-  <tr>
-    <td bgcolor="#D3D3D3" width="24" height="24"></td>
-    <td bgcolor="#E9E9E9" width="24" height="24"></td>
-    <td bgcolor="#C0C0C0" width="24" height="24"></td>
-    <td bgcolor="#D9DBDD" width="24" height="24"></td>
-    <td bgcolor="#313131" width="24" height="24"></td>
-    <td bgcolor="#3B3B3F" width="24" height="24"></td>
-    <td bgcolor="#5A5A60" width="24" height="24"></td>
-  </tr>
-</table>
-
-
-The visual direction is intentionally industrial and restrained. T.
-
-### Typography
-_______
-
 
 ## Runtime Configuration
 
@@ -291,6 +296,21 @@ npm run build
 npm run lint
 ```
 
+## UI Design choices 
+### Colors/Typography:
+During the frontend design planning phase, I decided to go with an industrial color pallete to suggest a prefab + tech oriented theme:   
+<table>
+  <tr>
+    <td bgcolor="#D3D3D3" width="24" height="24"></td>
+    <td bgcolor="#E9E9E9" width="24" height="24"></td>
+    <td bgcolor="#C0C0C0" width="24" height="24"></td>
+    <td bgcolor="#D9DBDD" width="24" height="24"></td>
+    <td bgcolor="#313131" width="24" height="24"></td>
+    <td bgcolor="#3B3B3F" width="24" height="24"></td>
+    <td bgcolor="#5A5A60" width="24" height="24"></td>
+  </tr>
+</table>
+
 ## Stack
 - <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
 - <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
@@ -301,9 +321,11 @@ npm run lint
 - <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
 - <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
 - <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
-  
+
+
+
 ### Dev Tooling
-- Developed on   Ubuntu 24.04.4
+- Developed on Ubuntu 24.04.4
 - ZSH Shell
 - Git CLI 
 - Docker CLI
@@ -319,9 +341,7 @@ npm run lint
   - Industrial color palette
 
 
-## Future Implementations
-
-## Notes
-
-- JWT signing and validation are handled server-side using `HS256`.
-- The required AI disclosure is documented in [ai-information.md](ai-information.md).
+## Future Features/Fixes
+- There is minor bug that occurs when the user enters in an already registered email in /signup, an error message is thrown, and that error message carries over to the /login page
+- Autocomplete of form fields performs worse in Chrome that in Firefox for some reason.
+- Responsive Design for tablet/mobile
