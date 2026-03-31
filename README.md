@@ -289,6 +289,8 @@ Behavior:
 
 Returns a success response for the client logout flow. The frontend calls this endpoint and then removes the stored token locally.
 
+Note: this endpoint is intentionally a lightweight client-side logout acknowledgment route. It is not protected by JWT middleware in the current demo implementation.
+
 ## Testing
 
 ### API Testing with cURL
@@ -308,6 +310,14 @@ curl -X POST http://localhost:8080/signup \
   }'
 ```
 
+Successful response:
+
+```json
+{
+  "message": "User created successfully"
+}
+```
+
 ### Login
 
 ```bash
@@ -319,6 +329,15 @@ curl -X POST http://localhost:8080/login \
   }'
 ```
 
+Successful response:
+
+```json
+{
+  "message": "Login Successful",
+  "token": "<JWT_TOKEN>"
+}
+```
+
 ### Authenticated Session Check
 
 ```bash
@@ -326,11 +345,29 @@ curl -X GET http://localhost:8080/me \
   -H "Authorization: Bearer <JWT_TOKEN>"
 ```
 
+Successful response:
+
+```json
+{
+  "message": "Authenticated",
+  "email": "john@example.com"
+}
+```
+
 ### Logout
 
+Note: `/logout` does not require a valid JWT in this demo. The client removes the stored token locally, and this route simply returns a success response for that flow.
+
 ```bash
-curl -X POST http://localhost:8080/logout \
-  -H "Authorization: Bearer <JWT_TOKEN>"
+curl -X POST http://localhost:8080/logout
+```
+
+Successful response:
+
+```json
+{
+  "message": "Logout successful. "
+}
 ```
 
 ## Known Limitations
