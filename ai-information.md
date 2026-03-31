@@ -21,9 +21,8 @@ I wrote this document myself. I only used AI to help me format a few things in m
 I started with the **/backend** of the application. I fed ChatGPT the project requirements and instructed it to walk through each step of the entire design process after submitting the requirements for the project. I specifically instructed it not to offer every solution at once. Instead, we implemented each feature one at a time. 
 
 **Initial prompt:** 
-```markdown
-I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up, carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicitly instruct you to move to the next step."
-```
+> *"I have to do this project for work: requirements.pdf ... Let's walk through this from the ground up, carefully, step by step, and explain what is going on at each step. When one step is completed, I will explicitly instruct you to move to the next step."*
+
 This placed us in a **prompt-loop** such that I could logically move stepwise through the project without my context being obliterated in the debugging process as messages accumulated. 
 
 The **prompt loop** for the project looked like this at a high level:     
@@ -108,9 +107,8 @@ The bug resulted from an incomplete client-side routing pattern. While I had imp
   - While I consulted ChatGPT for boilerplate TailwindCSS, I also used *Copilot* in VSCode to quickly edit CSS to save time.  
 
 Sample prompt:
-```markdown
-I want to add one of those icons in my password field that you can click to view the password. One of the eye icons.  
-```
+> *"I want to add one of those icons in my password field that you can click to view the password. One of the eye icons."*
+
 Copilot is a useful tool for quickly resolving one-off issues, but it fails for larger audits of a project. 
 
 ## Codex Workflow
@@ -122,9 +120,8 @@ After every feature from the requirements had been satisfied, I wanted to intera
 3. Refactors
 
 Here is a sample of the prompt after I had codex analyze my codebase:
-```markdown
-I am finishing up this project for work. Everything works correctly. However, I really want to clean up my codebase where possible. There is some slop-code at certain points. I want to refactor where possible while adhering closely to the conventions of the language. I also want to check for glaring security issues. I want you to analyze the codebase and assign high, medium, and low priorities to what you think needs to be adjusted. 
-```
+> *"I am finishing up this project for work. Everything works correctly. However, I really want to clean up my codebase where possible. There is some slop-code at certain points. I want to refactor where possible while adhering closely to the conventions of the language. I also want to check for glaring security issues. I want you to analyze the codebase and assign high, medium, and low priorities to what you think needs to be adjusted."*
+
 Codex identified around four high-risk issues with my codebase. One high-vulnerability security error I am embarrassed I did not catch was a set of **hardcoded DB credentials** in my Docker Compose file. We moved the credentials into the `.env` file:
 
 ```yaml
