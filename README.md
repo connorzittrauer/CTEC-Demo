@@ -113,28 +113,33 @@ cp backend/.env.example backend/.env
 ```
 *The backend and database read runtime settings from `backend/.env`*
 
-3. Start the production-style Docker stack
+3. Start the default Docker stack
 
 ```bash
+docker compose down -v
 docker compose up --build
 ```
+
+This uses the production stage of the backend image. It does not install `air`.
 
 4. Open the app locally
 
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:8080`
-- PostgreSQL: `localhost:5433`
 
-5. Optional: run the development Compose stack instead if you want hot reload while editing locally
+5. Optional: run the development stack if you want hot reload while editing locally
 
 ```bash
 docker compose -f docker-compose.dev.yml up --build
 ```
 
-6. Optional: open an interactive PostgreSQL shell
+This uses the backend `dev` target and runs `air` for Go hot reload.
+The development database is exposed on `localhost:5433`.
+
+6. Optional: open an interactive PostgreSQL shell (dev mode)
 
 ```bash
-docker exec -it auth-db-dev psql -U postgres -d authdb
+docker compose exec db psql -U postgres -d authdb
 ```
 
 ## Architecture Overview
@@ -177,7 +182,7 @@ backend/                   Go authentication API
 db/
   initialize.sql           PostgreSQL schema bootstrap
 
-docker-compose.yml         Production-style local run
+docker-compose.yml         Default local run
 docker-compose.dev.yml     Development run with hot reload
 ai-information.md          AI usage disclosure
 ```
@@ -216,11 +221,13 @@ CREATE TABLE users (
 );
 ```
 
-To reset the database:
+To reset local Docker data and reinitialize the database:
 
 ```bash
 docker compose down -v
 ```
+
+Use this if old records persist from a previous local run.
 
 ## API Overview
 
