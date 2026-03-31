@@ -1,4 +1,7 @@
-# FABRIX - Tiny Home 3D Printing
+<a id="readme-top"></a>
+
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
 <div align="center">
 <pre>
 ╱╲╲╲╲╲╲╲╲            ╱╲             ╱╲╲ ╱╲╲         ╱╲╲╲╲╲╲╲          ╱╲╲      ╱╲╲      ╱╲╲
@@ -10,7 +13,72 @@
 ╱╲╲            ╱╲╲         ╱╲╲      ╱╲╲╲╲ ╱╲╲       ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲
                                                                                            
 </pre>
+  <h3 align="center">FABRIX - Tiny Home 3D Printing</h3>
+  <p align="center">
+    <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
+    <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+    <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+    <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+    <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+    <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+    <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+    <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
+  </p>
+  <p align="center">
+    A React + Go + PostgreSQL demo website for configuring and 3D-printing a tiny home.
+    <br />
+    <a href="#api-overview"><strong>API docs »</strong></a>
+  </p>
 </div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#concept">Concept</a></li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#architecture-overview">Architecture</a>
+      <ul>
+        <li><a href="#project-structure">Project Structure</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#runtime-configuration">Runtime Configuration</a>
+      <ul>
+        <li><a href="#database-initialization">Database Initialization</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#api-overview">API Overview</a>
+      <ul>
+        <li><a href="#post-signup">POST /signup</a></li>
+        <li><a href="#post-login">POST /login</a></li>
+        <li><a href="#get-me">GET /me</a></li>
+        <li><a href="#post-logout">POST /logout</a></li>
+        <li><a href="#api-testing-with-curl">API Testing with cURL</a></li>
+      </ul>
+    </li>
+    <li><a href="#known-limitations">Known Limitations</a></li>
+    <li>
+      <a href="#testing">Testing</a>
+      <ul>
+        <li><a href="#api-testing-with-curl">API Testing with cURL</a></li>
+        <li><a href="#automated-testing">Automated Testing</a></li>
+      </ul>
+    </li>
+    <li><a href="#color-design">Color Design</a></li>
+    <li><a href="#dev-tooling">Dev Tooling</a></li>
+    <li><a href="#design-references">Design References</a></li>
+    <li><a href="#future-featuresfixes">Future Features & Fixes</a></li>
+  </ol>
+</details>
 
 ## Concept
 For this demo, I created a company called ***FABRIX***, a mock website that allows you to build and 3D print your tiny home.
@@ -18,6 +86,7 @@ For this demo, I created a company called ***FABRIX***, a mock website that allo
 <p align="center">
   <img src="docs/images/demo.gif" alt="FABRIX demo" width="700">
 </p>
+<p align="center"><em>Example website usage</em></p>
 
 ## Prerequisites
 
@@ -222,7 +291,11 @@ Behavior:
 
 Returns a success response for the client logout flow. The frontend calls this endpoint and then removes the stored token locally.
 
-## cURL Examples
+## Testing
+
+### API Testing with cURL
+
+The project does not include a Postman collection. The cURL examples below provide a complete route-testing flow for validating the API locally.
 
 ### Signup
 
@@ -255,6 +328,13 @@ curl -X GET http://localhost:8080/me \
   -H "Authorization: Bearer <JWT_TOKEN>"
 ```
 
+### Logout
+
+```bash
+curl -X POST http://localhost:8080/logout \
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
+
 ## Known Limitations
 
 - Tokens are handled as a lightweight demo auth flow and are not backed by refresh-token rotation
@@ -262,7 +342,7 @@ curl -X GET http://localhost:8080/me \
 - Logout is client-driven and removes the stored token locally rather than maintaining a server-side token revocation list
 - The app is built as a challenge demo, so production concerns such as rate limiting, audit logging, and deeper observability are intentionally minimal
 
-## Testing
+### Automated Testing
 
 Run backend tests in Docker:
 
@@ -296,8 +376,7 @@ npm run build
 npm run lint
 ```
 
-## UI Design choices 
-### Colors/Typography:
+### Color Design
 During the frontend design planning phase, I decided to go with an industrial color pallete to suggest a prefab + tech oriented theme:   
 <table>
   <tr>
@@ -310,19 +389,6 @@ During the frontend design planning phase, I decided to go with an industrial co
     <td bgcolor="#5A5A60" width="24" height="24"></td>
   </tr>
 </table>
-
-## Stack
-- <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
-- <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-- <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
-- <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
-- <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-- <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
-- <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
-- <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-- <img alt="Docker Compose" src="https://img.shields.io/badge/Docker_Compose-1D63ED?style=for-the-badge&logo=docker&logoColor=white">
-
-
 
 ### Dev Tooling
 - Developed on Ubuntu 24.04.4
@@ -341,7 +407,10 @@ During the frontend design planning phase, I decided to go with an industrial co
   - Industrial color palette
 
 
-## Future Features/Fixes
-- There is minor bug that occurs when the user enters in an already registered email in /signup, an error message is thrown, and that error message carries over to the /login page
+## Future Features & Fixes
+- There is minor bug that occurs when the user enters in an already registered email in `/signup`, an error message is thrown, and that error message carries over to the `/login` page
 - Autocomplete of form fields performs worse in Chrome that in Firefox for some reason.
 - Responsive Design for tablet/mobile
+
+[linkedin-shield]: https://img.shields.io/badge/LinkedIn-Connor%20Zittrauer-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white
+[linkedin-url]: https://www.linkedin.com/in/connor-zittrauer/
