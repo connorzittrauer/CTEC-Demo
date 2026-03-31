@@ -62,7 +62,6 @@
         <li><a href="#post-login">POST /login</a></li>
         <li><a href="#get-me">GET /me</a></li>
         <li><a href="#post-logout">POST /logout</a></li>
-        <li><a href="#api-testing-with-curl">API Testing with cURL</a></li>
       </ul>
     </li>
     <li><a href="#known-limitations">Known Limitations</a></li>
@@ -157,8 +156,8 @@ Authentication uses JWTs returned by the backend after login. The frontend attac
 └─────────┘    └─────────────────┘    └───────────────┘    └────────────────┘
 </pre>
 </div>
-JWT flow:
-token stored after login -> bearer token sent -> token verified
+
+- JWT flow: token stored after login -> bearer token sent -> token verified
 
 
 ## Project Structure
@@ -342,7 +341,7 @@ curl -X POST http://localhost:8080/logout \
 - Logout is client-driven and removes the stored token locally rather than maintaining a server-side token revocation list
 - The app is built as a challenge demo, so production concerns such as rate limiting, audit logging, and deeper observability are intentionally minimal
 
-### Automated Testing
+## Automated Testing
 
 Run backend tests in Docker:
 
@@ -377,7 +376,7 @@ npm run lint
 ```
 
 ### Color Design
-During the frontend design planning phase, I decided to go with an industrial color pallete to suggest a prefab + tech oriented theme:   
+During the frontend design planning phase, I decided to go with an industrial color palette to suggest a prefab + tech oriented theme:   
 <table>
   <tr>
     <td bgcolor="#D3D3D3" width="24" height="24"></td>
@@ -407,9 +406,9 @@ During the frontend design planning phase, I decided to go with an industrial co
   - Industrial color palette
 
 
-## Future Features & Fixes
+### Future Features & Fixes
 - There is minor bug that occurs when the user enters in an already registered email in `/signup`, an error message is thrown, and that error message carries over to the `/login` page
-- Autocomplete of form fields performs worse in Chrome that in Firefox for some reason.
+- Autocomplete of form fields performs worse in Chrome than in Firefox for some reason.
 - Responsive Design for tablet/mobile
 
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-Connor%20Zittrauer-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white
