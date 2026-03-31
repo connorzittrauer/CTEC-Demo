@@ -1,18 +1,30 @@
-FROM golang:1.26
+FROM golang:1.26 AS base
 
-# Set working directory
 WORKDIR /app
 
-# Install Air (for hot reloading)
-RUN go install github.com/air-verse/air@latest
-
-# Copy go mod files first (for caching)
+# Copy Go module files first to preserve dependency cache layers.
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
 
-# Build & run the golang app on port :8080 using Air
-RUN go build -o main .
+FROM base AS dev
+
+# Air is only used for local development hot reloading.
+RUN go install github.com/air-verse/air@v1.64.5
+
 EXPOSE 8080
 CMD ["air"]
+
+FROM base AS build
+
+RUN go build -o /app/main .
+
+FROM golang:1.26 AS production
+
+WORKDIR /app
+
+COPY --from=build /app/main ./main
+
+EXPOSE 8080
+CMD ["./main"]
