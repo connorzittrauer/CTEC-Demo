@@ -13,7 +13,7 @@
 ╱╲╲            ╱╲╲         ╱╲╲      ╱╲╲╲╲ ╱╲╲       ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲      ╱╲╲
                                                                                            
 </pre>
-  <h3 align="center">FABRIX - Tiny Home 3D Printing</h3>
+  <h3 align="center">Tiny Home 3D Printing</h3>
   <p align="center">
     <img alt="React" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=111827">
     <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
@@ -72,7 +72,6 @@
         <li><a href="#automated-testing">Automated Testing</a></li>
       </ul>
     </li>
-    <li><a href="#color-design">Color Design</a></li>
     <li><a href="#dev-tooling">Dev Tooling</a></li>
     <li><a href="#design-references">Design References</a></li>
     <li><a href="#future-featuresfixes">Future Features & Fixes</a></li>
@@ -374,43 +373,6 @@ cd frontend
 npm run build
 npm run lint
 ```
-
-### Color Design
-During the frontend design planning phase, I decided to go with an industrial color palette to suggest a prefab + tech oriented theme:   
-<table>
-  <tr>
-    <th>Swatch</th>
-    <th>Hex</th>
-  </tr>
-  <tr>
-    <td bgcolor="#D3D3D3" width="24" height="24"></td>
-    <td><code>#D3D3D3</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#E9E9E9" width="24" height="24"></td>
-    <td><code>#E9E9E9</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#C0C0C0" width="24" height="24"></td>
-    <td><code>#C0C0C0</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#D9DBDD" width="24" height="24"></td>
-    <td><code>#D9DBDD</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#313131" width="24" height="24"></td>
-    <td><code>#313131</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#3B3B3F" width="24" height="24"></td>
-    <td><code>#3B3B3F</code></td>
-  </tr>
-  <tr>
-    <td bgcolor="#5A5A60" width="24" height="24"></td>
-    <td><code>#5A5A60</code></td>
-  </tr>
-</table>
 
 ### Dev Tooling
 - Developed on Ubuntu 24.04.4
