@@ -73,14 +73,13 @@ Here are some important Go concepts I learned while building out the backend:
     - When abstracting code out, I explicitly asked ChatGPT for advice on what is and isn't convention in Go. By doing so, I structured my project to adhere to D.R.Y. (don't repeat yourself) and Single Responsibility design practices, such that the logic in ```/handlers/auth.go``` only processed handlers, ```jwt.go``` strictly handled session tokens, etc.
 - **JWT Session Handling**
     - JWT session handling is a bit new to me. I had never implemented it from scratch, so I carefully read the generated code in ```jwt.go```. 
-- **Syntax Explanation**
-    - I carefully read the generated code and typed it mostly by hand, to learn it better. 
+- **Syntax Explanation** 
     - I learned that return types in Go occur *after* the parameter definition.
     - Type declaration occurs *after* variable declaration, which was new to me!
 
   
 #### III. **AI-Assisted Debugging**
-**Faulty Authentication Pattern**     
+***Faulty Authentication Pattern:***    
 I used ChatGPT frequently to help me debug edge cases while testing the frontend of my application. While intentionally trying to break the site, I encountered an odd bug. Below is a sample of the prompt I gave ChatGPT to assist with debugging:
 
 > *"When the user navigates to the dashboard after signing in and clicks the logout button, that works great. HOWEVER, when the user goes to the dashboard and enters a random string in the search bar, e.g.:*
@@ -90,7 +89,7 @@ I used ChatGPT frequently to help me debug edge cases while testing the frontend
 
 The bug resulted from faulty authentication pattern being used in `App.tsx`. I *learned* from this prompting session that it is bad practice to include route authentication login within `App.tsx`.
 
-**Client-side Routing Flaw**  
+***Client-side Routing Flaw***  
 I used ChatGPT again while testing edge cases related to routing and authentication. While intentionally trying to break the application, I encountered an inconsistency in route protection. Below is a sample of the prompt I gave ChatGPT:
 
 > *"When the user logs out and is redirected to `/auth`, everything works correctly. HOWEVER, if the user then enters a random route like:*
