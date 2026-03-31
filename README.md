@@ -68,6 +68,7 @@
     <li>
       <a href="#testing">Testing</a>
       <ul>
+        <li><a href="#api-testing-with-postman">API Testing with Postman</a></li>
         <li><a href="#api-testing-with-curl">API Testing with cURL</a></li>
         <li><a href="#automated-testing">Automated Testing</a></li>
       </ul>
@@ -291,11 +292,21 @@ Returns a success response for the client logout flow. The frontend calls this e
 
 Note: this endpoint is intentionally a lightweight client-side logout acknowledgment route. It is not protected by JWT middleware in the current demo implementation.
 
-## Testing
+## Testing 🔴
+
+### API Testing with Postman
+
+A Postman collection 'postman-collection.json' is included at the root of this project.
+
+To import it into Postman:
+
+1. Open Postman
+2. Click `Import`
+3. Test 
 
 ### API Testing with cURL
 
-The project does not include a Postman collection. The cURL examples below provide a complete route-testing flow for validating the API locally.
+The cURL examples below provide an equivalent route-testing flow for validating the API locally.
 
 ### Signup
 
